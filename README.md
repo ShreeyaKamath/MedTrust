@@ -1,0 +1,110 @@
+# MedTrust
+
+**A Zero-Trust Multi-Agent Framework with Provenance-Aware Memory and Uncertainty-Guided Retrieval for Clinical Decision Support**
+
+An M.Tech research prototype for clinician-facing clinical decision support. **Phase 1 establishes the repository and proposed research architecture only.** No clinical functionality is implemented and no experimental results are available.
+
+## Research motivation and problem statement
+
+Language models can produce plausible clinical statements without reliable support. Retrieval and collaboration between agents may help, but can also propagate stale evidence, shared errors, poisoned memory, and malicious tool responses. Agreement alone does not establish correctness.
+
+MedTrust will investigate whether explicit evidence provenance, independently assessed trust, uncertainty-guided retrieval, and operation-level authorization improve the reliability and auditability of clinician-facing reports under controlled evaluation.
+
+## Proposed architecture and pipeline
+
+```mermaid
+flowchart TD
+    A[Clinical Case Intake] --> B[Input Safety / PII Gate]
+    B --> C[OpenClaw Orchestrator]
+    C --> D[Specialist Agents]
+    D --> E[Evidence Retrieval + Provenance Memory]
+    E --> F[Trust Engine]
+    F --> G[Uncertainty Engine]
+    G --> H[Safety Critic / Zero-Trust Gate]
+    H --> I[Clinician-Facing Evidence Report]
+```
+
+The proposed specialists are History, Lab, Medication, Guideline, Evidence / Research, and Critic agents. Medium uncertainty may trigger bounded additional retrieval and structured analysis; high uncertainty will require human review or additional information. Every recommendation requires clinician review. Tool authorization applies to every tool operation, including operations before the final report gate.
+
+Four distinctions govern the design:
+
+- LLM reasoning != clinical evidence.
+- LLM memory != authoritative patient record.
+- Agent confidence != agent trust.
+- Agent recommendation != permission to act.
+
+Agents will return claims, evidence, citations/provenance, missing information, contradictions, confidence, and limitations. Private chain-of-thought must never be exposed or stored.
+
+## Proposed research contributions
+
+- Provenance-aware longitudinal memory with source lineage, freshness, contradictions, and correction tracking.
+- Separate evidence, agent, and memory trust assessments evaluated against independently labeled outcomes.
+- Uncertainty-guided retrieval and human escalation with bounded resource use.
+- Zero-trust MCP/tool access with least privilege and observable audit trails.
+- Controlled adversarial evaluation and ablations that test the incremental value of each component.
+
+These are research objectives, not demonstrated contributions or clinical efficacy claims.
+
+## Safety and ethical scope
+
+Development and evaluation use synthetic data, public datasets, or properly de-identified data only. Public availability does not guarantee de-identification or permission to redistribute; review dataset terms and identifiers before use. Never commit real patient records, identifiers, secrets, or credentials. The input gate is a proposed safeguard, not permission to ingest real patient data.
+
+MedTrust is not an autonomous doctor, diagnostic system, prescribing system, or production medical device. Initial MCP access will be read-only. High-risk or irreversible future actions require explicit human approval and separate authorization; a report cannot authorize execution.
+
+## Technology stack
+
+| Area | Phase 1 / planned direction |
+| --- | --- |
+| Research development | Python 3.12; optional pytest and Ruff tooling |
+| Agent orchestration | OpenClaw, proposed; integration deferred |
+| Tool interfaces | MCP; authenticated, least-privilege, initially read-only |
+| Retrieval and memory | Evidence retrieval and provenance-aware memory; storage and embedding choices deferred |
+| Trust and uncertainty | Research components; algorithms deferred |
+| Backend and frontend | Reserved directories; frameworks deferred |
+| Infrastructure | Empty Compose services map; no services deployed |
+
+No application dependencies are installed in this phase. `pyproject.toml` is a non-distributable research workspace configuration with an optional development dependency group.
+
+## Evaluation strategy
+
+Compare B0 Single LLM through B5 Full MedTrust using fixed cases, independent reference labels, controlled budgets, repeated runs, and component ablations. Measure factual/evidence quality, retrieval performance, calibration, escalation, attack success, and computational cost. Report uncertainty intervals and failures, with no invented results. See [methodology](docs/research-methodology.md), [evaluation plan](docs/evaluation-plan.md), and [threat model](docs/threat-model.md).
+
+## Repository structure
+
+```text
+medtrust/
+├── README.md
+├── LICENSE
+├── CONTRIBUTING.md
+├── .gitignore
+├── .env.example
+├── docker-compose.yml
+├── pyproject.toml
+├── backend/
+├── frontend/
+├── openclaw/{agents,skills,policies,prompts}/
+├── mcp/{fhir_server,evidence_server,medication_server}/
+├── rag/{ingestion,embeddings,retrieval,reranking,evaluation}/
+├── memory/
+├── trust/
+├── uncertainty/
+├── evaluation/{benchmark,metrics,attacks,experiments}/
+├── datasets/synthetic/
+├── docs/
+│   ├── architecture.md
+│   ├── research-methodology.md
+│   ├── threat-model.md
+│   └── evaluation-plan.md
+├── scripts/
+└── tests/
+```
+
+Empty component directories contain `.gitkeep` placeholders. See [architecture](docs/architecture.md) for responsibilities and [contributing](CONTRIBUTING.md) for workflow.
+
+## Development status
+
+Phase 1 only: documentation, configuration, and directory placeholders. Backend logic, database models, RAG, agents, OpenClaw integration, trust algorithms, MCP servers, frontend, and clinical decision logic are deferred. There are no application tests or running services yet.
+
+## Medical disclaimer
+
+This repository is an unevaluated research prototype, not medical advice. It must not be used to diagnose, prescribe, or make autonomous treatment decisions. Any future evidence report requires review by a qualified clinician. No clinical efficacy, clinical safety validation, or regulatory approval is claimed.

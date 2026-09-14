@@ -1,0 +1,3 @@
+# Phase 1 placeholder. Services will be introduced in later phases.
+# No databases, vector stores, model runtimes, or application services are deployed.
+services: {}
