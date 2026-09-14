@@ -11,6 +11,7 @@ def isolated_settings(monkeypatch, tmp_path):
     monkeypatch.chdir(tmp_path)
     for name in ("ENV", "API_HOST", "API_PORT", "LOG_LEVEL"):
         monkeypatch.delenv(f"MEDTRUST_{name}", raising=False)
+    monkeypatch.delenv("DATABASE_URL", raising=False)
     get_settings.cache_clear()
     yield
     get_settings.cache_clear()

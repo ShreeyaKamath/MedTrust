@@ -3,7 +3,7 @@
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 Environment = Literal["development", "test", "staging", "production"]
@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_prefix="MEDTRUST_", env_file=".env", env_file_encoding="utf-8", extra="ignore"
     )
+
+    database_url: SecretStr = Field(default=SecretStr(""), validation_alias="DATABASE_URL")
 
     env: Environment = "development"
     api_host: str = Field(default="127.0.0.1", min_length=1)

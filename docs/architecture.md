@@ -1,6 +1,6 @@
 # Proposed research architecture
 
-All components below are design proposals. Phase 1 implements only documentation and repository scaffolding.
+The clinical pipeline below remains proposed. Phase 1 established documentation and scaffolding; Phase 2 added the FastAPI foundation; Phase 3 implements only the persistence layer described below.
 
 ## Governing distinctions
 
@@ -76,4 +76,44 @@ Future MCP access is authenticated, least-privilege, deny-by-default, and initia
 
 ## Audit and evaluation pipeline
 
-Record research case/run IDs, component and policy versions, source references, structured outputs, gateway outcomes, escalation events, and timing/cost metadata. Exclude secrets, real patient information, and private chain-of-thought. Keep audit access scoped and make integrity changes detectable. Evaluation will replay frozen cases and local adversarial scenarios, associate outputs with independent labels, and report component failures as well as aggregate scores. Audit storage and integrity mechanisms are deferred.
+Record research case/run IDs, component and policy versions, source references, structured outputs, gateway outcomes, escalation events, and timing/cost metadata. Exclude secrets, real patient information, and private chain-of-thought. Keep audit access scoped and make integrity changes detectable. Evaluation will replay frozen cases and local adversarial scenarios, associate outputs with independent labels, and report component failures as well as aggregate scores. Phase 3 supplies audit record storage; integrity enforcement mechanisms remain deferred.
+
+## Phase 3 persistence foundation
+
+SQLAlchemy 2.x typed models share declarative metadata with a reversible Alembic
+migration. PostgreSQL with synchronous psycopg 3 is the local persistence target;
+SQLite supports isolated model and migration tests. Settings supply `DATABASE_URL`,
+kept out of settings representations. Engine creation is lazy and SQL parameter
+logging is disabled. App import, startup and `/health` do not connect to a database.
+
+- **ClinicalCase** stores a unique research case reference, title, summary, eligible
+  source type, de-identification flag and timestamps. Only synthetic/de-identified
+  source values and a true de-identification flag are accepted. These declarations
+  do not prove that free text is de-identified; eligibility review remains required.
+- **AgentRun** links to one case and records observable execution metadata and concise
+  output summaries. Pending runs have nullable `started_at`; completion time is also
+  nullable. No execution, state machine or hidden chain-of-thought storage exists.
+- **EvidenceRecord** stores source references, publication/retrieval dates, a caller
+  supplied content hash (use an algorithm-prefixed value such as `sha256:...`) and
+  provenance JSON. A nullable case link permits shared source metadata. No documents
+  are ingested, no hashes are computed, and no provenance/trust scoring is implemented.
+- **AuditEvent** records actor/action/outcome and optional case/run/resource references.
+  Nullable links support system-level events. When both case and run are supplied,
+  callers must keep their case association consistent; cross-link enforcement is deferred.
+
+Cases have many runs, evidence records and audit events; runs have many audit events.
+Foreign keys use RESTRICT, with no cascading deletes or automatic reference nulling,
+so parent deletion cannot silently erase or detach history. Audit rows have only a
+creation timestamp and no update schema: append-only use is a convention at this
+stage, not database-enforced immutability. Controlled retention/deletion policies and
+append-only database permissions are future work. JSON changes should replace the
+whole value; in-place nested mutation tracking is not configured.
+
+All four entities are research artifacts, **not authoritative EHR records**. No direct
+PII columns are present; schema tests guard against obvious identifiers. Free-text
+and JSON fields are not PII detectors. `AuditEvent.details` must contain safe structured
+metadata only: no secrets, API keys, OAuth tokens, full prompts containing sensitive
+records, sensitive patient data or hidden chain-of-thought. The same restrictions
+apply to summaries, references, error messages and provenance metadata. Never log
+records, connection URLs or database exception details. No public CRUD endpoints,
+external clinical connections or later-phase functionality are introduced.

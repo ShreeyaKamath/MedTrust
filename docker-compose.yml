@@ -1,3 +1,19 @@
-# Phase 1 placeholder. Services will be introduced in later phases.
-# No databases, vector stores, model runtimes, or application services are deployed.
-services: {}
+# Local research development only; synthetic/de-identified data only.
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-medtrust}
+      POSTGRES_USER: ${POSTGRES_USER:-medtrust}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in your local .env}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  postgres_data:

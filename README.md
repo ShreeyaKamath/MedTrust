@@ -2,7 +2,7 @@
 
 **A Zero-Trust Multi-Agent Framework with Provenance-Aware Memory and Uncertainty-Guided Retrieval for Clinical Decision Support**
 
-An M.Tech research prototype for clinician-facing clinical decision support. **Phase 1 established the repository and proposed research architecture; Phase 2 adds the FastAPI backend foundation.** No clinical functionality is implemented and no experimental results are available.
+An M.Tech research prototype for clinician-facing clinical decision support. **Phase 1 established the repository and proposed research architecture; Phase 2 adds the FastAPI backend foundation; Phase 3 adds PostgreSQL persistence.** No clinical functionality is implemented and no experimental results are available.
 
 ## Research motivation and problem statement
 
@@ -61,9 +61,9 @@ MedTrust is not an autonomous doctor, diagnostic system, prescribing system, or 
 | Retrieval and memory | Evidence retrieval and provenance-aware memory; storage and embedding choices deferred |
 | Trust and uncertainty | Research components; algorithms deferred |
 | Backend and frontend | FastAPI backend foundation; frontend deferred |
-| Infrastructure | Empty Compose services map; no services deployed |
+| Infrastructure | PostgreSQL 18 for optional local research persistence |
 
-`pyproject.toml` remains a non-distributable research workspace configuration. Phase 2 dependencies and development tools are pinned in `uv.lock`.
+`pyproject.toml` remains a non-distributable research workspace configuration. Backend dependencies and development tools are pinned in `uv.lock`.
 
 ## Evaluation strategy
 
@@ -103,7 +103,7 @@ Empty component directories contain `.gitkeep` placeholders. See [architecture](
 
 ## Development status
 
-Phase 2 provides FastAPI initialization, routing, typed settings, JSON application logging, safe error handling, a public liveness endpoint, and isolated backend tests. Database and security packages are documented placeholders. Database models, RAG, agents, OpenClaw integration, provenance memory, trust and uncertainty engines, MCP servers, frontend, clinical decision logic, and adversarial evaluation remain deferred.
+Phase 2 provides FastAPI initialization, routing, typed settings, JSON application logging, safe error handling, a public liveness endpoint, and isolated backend tests. Phase 3 adds SQLAlchemy models, internal Pydantic contracts, lazy sessions, and Alembic migrations. Security remains a documented placeholder. RAG, agents, OpenClaw integration, provenance memory, trust and uncertainty engines, MCP servers, frontend, clinical decision logic, and adversarial evaluation remain deferred.
 
 ## Local backend development
 
@@ -112,12 +112,12 @@ From the repository root, with Python 3.12 and uv:
 ```bash
 uv sync --locked
 uv run pytest
-uv run ruff check backend
-uv run ruff format --check backend
+uv run ruff check backend alembic
+uv run ruff format --check backend alembic
 uv run uvicorn backend.app.main:app --reload --no-access-log
 ```
 
-No Docker, database, model runtime, API key, or actual `.env` file is needed. Settings optionally load `.env` from the working directory; environment variables take precedence. Supported settings are `MEDTRUST_ENV` (development/test/staging/production), `MEDTRUST_API_HOST` (127.0.0.1), `MEDTRUST_API_PORT` (8000), and `MEDTRUST_LOG_LEVEL` (INFO; uppercase standard levels). Future service variables in `.env.example` are ignored.
+No Docker, database, model runtime, API key, or actual `.env` file is needed. Settings optionally load `.env` from the working directory; environment variables take precedence. Supported settings are `MEDTRUST_ENV` (development/test/staging/production), `MEDTRUST_API_HOST` (127.0.0.1), `MEDTRUST_API_PORT` (8000), and `MEDTRUST_LOG_LEVEL` (INFO; uppercase standard levels). `DATABASE_URL` is optional and used only for explicit database operations. Other future service variables in `.env.example` are ignored.
 
 Uvicorn CLI host/port options are separate from application settings. To launch using the configured host and port:
 
@@ -136,6 +136,58 @@ Expected default response:
 ```
 
 Health reports process liveness only. Application logs use JSON and fixed infrastructure events; never pass request contents, credentials, or patient information to logging calls. Server logs are configured separately; the commands disable access logs to avoid recording request URLs. Error responses omit exception details and validation inputs. Authentication is not implemented; only public infrastructure is available.
+
+## Local research database (Phase 3)
+
+PostgreSQL persistence is available for `ClinicalCase`, `AgentRun`, `EvidenceRecord`,
+and `AuditEvent`. These are research artifacts, not authoritative EHR records.
+No case ingestion API, dataset generation, agent execution, or retrieval is implemented.
+
+Copy `.env.example` to a local `.env` and replace both database password placeholders
+with the same local development password. URL-encode special characters in the URL
+password. Never commit `.env`. Compose requires `POSTGRES_PASSWORD`; its port binds
+only to loopback. The named volume persists local data. Use synthetic/de-identified
+research data only. This Compose configuration is not a production deployment.
+
+From the repository root:
+
+```bash
+cp .env.example .env
+# Edit .env locally before starting PostgreSQL.
+docker compose config --quiet
+docker compose up -d postgres
+uv run alembic upgrade head
+uv run alembic current
+uv run alembic check
+# Destructive: removes the four research tables and their data.
+uv run alembic downgrade base
+# Recreate the schema after the downgrade validation.
+uv run alembic upgrade head
+docker compose stop postgres
+```
+
+Validate without Docker or a running database:
+
+```bash
+uv sync
+uv run pytest
+uv run ruff check backend alembic
+uv run ruff format --check backend alembic
+uv run python -c 'from backend.app.main import app; assert app'
+uv run alembic heads
+# With DATABASE_URL configured, compile PostgreSQL SQL without connecting:
+uv run alembic upgrade head --sql
+uv run alembic downgrade 0001:base --sql
+```
+
+Tests use in-memory SQLite, including migration upgrade/downgrade and metadata
+comparison; this does not establish PostgreSQL runtime compatibility. Validate the
+online commands above on a disposable local research database. No database connection
+or schema creation occurs at FastAPI startup; `/health` remains liveness-only.
+UUIDs and most defaults are assigned at SQLAlchemy insert/flush. UTC timestamps are
+stored using PostgreSQL timezone-aware columns. `updated_at` is maintained by
+SQLAlchemy updates, not a database trigger. Callers explicitly commit sessions;
+uncommitted transactions are rolled back when the dependency closes.
 
 ## Medical disclaimer
 

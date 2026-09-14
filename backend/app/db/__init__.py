@@ -1,1 +1,1 @@
-"""MedTrust infrastructure package; future functionality is deferred."""
+"""Lazy database infrastructure; importing this package opens no connections."""
