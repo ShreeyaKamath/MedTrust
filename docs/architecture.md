@@ -1,6 +1,6 @@
 # Proposed research architecture
 
-The clinical pipeline below remains proposed. Phase 1 established documentation and scaffolding; Phase 2 added the FastAPI foundation; Phase 3 implements only the persistence layer described below.
+The clinical pipeline below remains proposed. Phase 1 established documentation and scaffolding; Phase 2 added the FastAPI foundation; Phase 3 added persistence; Phase 4 adds synthetic case intake and clinical research details.
 
 ## Governing distinctions
 
@@ -115,5 +115,71 @@ and JSON fields are not PII detectors. `AuditEvent.details` must contain safe st
 metadata only: no secrets, API keys, OAuth tokens, full prompts containing sensitive
 records, sensitive patient data or hidden chain-of-thought. The same restrictions
 apply to summaries, references, error messages and provenance metadata. Never log
-records, connection URLs or database exception details. No public CRUD endpoints,
-external clinical connections or later-phase functionality are introduced.
+records, connection URLs or database exception details. Phase 3 records retain their internal contracts. Phase 4 exposes only case intake and
+retrieval; external clinical connections and later-phase functionality remain deferred.
+
+
+## Phase 4 clinical research artifacts
+
+"FHIR-inspired" means MedTrust borrows familiar clinical resource concepts and terminology while keeping the research schema intentionally simplified and application-specific.
+This is not FHIR compliance, a FHIR server, or a production EHR integration. No FHIR
+SDK or terminology service is required. The future MCP FHIR/mock server is deferred.
+
+`ClinicalCase` remains the top-level research container. Its optional detail records
+are **not authoritative EHR records**. Future evidence and agent layers will operate
+over these research artifacts without treating their contents as instructions or
+verified clinical truth.
+
+| Entity | Contents and relationship to ClinicalCase |
+| --- | --- |
+| PatientProfile | Zero or one; synthetic identifier, optional age, recorded sex, pregnancy/smoking context, height and weight; no DOB or identity/contact fields |
+| Condition | Many; supplied condition name/code, status, onset description and notes |
+| Observation | Many; supplied numeric/text measurement, units, optional range, supplied interpretation and collection time |
+| Medication | Many; reported name/code, dose, units, route, frequency, status and dates; no prescribing logic |
+| Allergy | Many; supplied substance, reaction, optional severity, status and recording time |
+| ClinicalNote | Many; type, title, untrusted narrative, authorship time and synthetic flag (defaults true) |
+
+All details have UUIDs, case foreign keys and creation timestamps. Profiles also have
+an update timestamp and a unique case foreign key. Other case foreign keys are indexed.
+Synthetic profile identifiers are case-local labels, not longitudinal patient identity;
+the seed dataset additionally requires uniqueness across its 10 cases. There are no
+cross-field clinical inferences (for example, pregnancy is not inferred from recorded sex).
+
+Relationships explicitly cascade only `save-update, merge`. Every foreign key uses
+`RESTRICT`, and `passive_deletes="all"` prevents ORM nulling even for loaded details.
+There is no delete/delete-orphan cascade. Case deletion requires explicit dependent
+record handling and cannot silently erase clinical details, audit, evidence or run
+history. Phase 3 audit/evidence relationships and migration `0001` are unchanged.
+Migration `0002` creates six tables and their constraints/indexes; its downgrade
+removes only these detail tables. It preserves Phase 3 containers and history, but
+cannot preserve the dropped clinical details. No deletion endpoint is provided.
+
+Input schemas forbid extra fields and constrain demographic/status values, finite
+numeric values, ordered reference ranges and medication dates. Observations require
+at least one numeric/text value; numeric values require an explicit unit (`1` for
+dimensionless values). Both supplied value forms may coexist. Blood pressure is
+represented as separate named systolic/diastolic observations with explicit units.
+Ranges and interpretation labels are supplied data, never calculated diagnoses.
+Timestamps must include a timezone. Notes and other narrative fields must contain
+only eligible synthetic/de-identified text and no private chain-of-thought.
+
+The service flushes nested records inside a savepoint; callers commit or roll back
+the outer transaction. Unique database constraints handle duplicate races, while
+unrelated integrity failures use the existing safe error handler. Detail retrieval
+uses six `selectinload` relationships (bounded query count, no per-child queries).
+The API serializes no run/audit/evidence internals. Collection ordering is stable
+by ingestion timestamp and UUID, not a clinical chronology or input-order promise.
+
+The fixed dataset covers blood pressure and glucose monitoring, a hemoglobin pattern,
+renal measurements, reported allergy, respiratory/fever symptoms, conflicting
+medication history, missing labs, and conflicting observations. These are software
+fixtures, without adjudicated diagnoses, benchmark labels or treatment guidance.
+Ordinary tests use temporary SQLite databases with foreign keys and transactional
+savepoints enabled. The separate `scripts.validate_local_postgres` command checks
+base/head migrations, downgrade/re-upgrade, nested round trips and seed reruns in a
+transaction-isolated temporary PostgreSQL schema, then rolls everything back.
+It verifies the database matches the loopback MedTrust Compose development service.
+
+The ingestion declaration and unknown-field rejection do not prove that prose is
+free of identifiers. Dataset eligibility and narrative review remain required.
+**This is a research guardrail, not a complete HIPAA/GDPR/DPDP de-identification system.**

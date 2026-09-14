@@ -2,7 +2,7 @@
 
 **A Zero-Trust Multi-Agent Framework with Provenance-Aware Memory and Uncertainty-Guided Retrieval for Clinical Decision Support**
 
-An M.Tech research prototype for clinician-facing clinical decision support. **Phase 1 established the repository and proposed research architecture; Phase 2 adds the FastAPI backend foundation; Phase 3 adds PostgreSQL persistence.** No clinical functionality is implemented and no experimental results are available.
+An M.Tech research prototype for clinician-facing clinical decision support. **Phase 1 established the repository and proposed research architecture; Phase 2 adds the FastAPI backend foundation; Phase 3 adds PostgreSQL persistence; Phase 4 adds synthetic clinical-case intake and storage.** No clinical reasoning is implemented and no experimental results are available.
 
 ## Research motivation and problem statement
 
@@ -103,7 +103,7 @@ Empty component directories contain `.gitkeep` placeholders. See [architecture](
 
 ## Development status
 
-Phase 2 provides FastAPI initialization, routing, typed settings, JSON application logging, safe error handling, a public liveness endpoint, and isolated backend tests. Phase 3 adds SQLAlchemy models, internal Pydantic contracts, lazy sessions, and Alembic migrations. Security remains a documented placeholder. RAG, agents, OpenClaw integration, provenance memory, trust and uncertainty engines, MCP servers, frontend, clinical decision logic, and adversarial evaluation remain deferred.
+Phase 2 provides FastAPI initialization, routing, typed settings, JSON application logging, safe error handling, a public liveness endpoint, and isolated backend tests. Phase 3 adds SQLAlchemy models, internal Pydantic contracts, lazy sessions, and Alembic migrations. Phase 4 adds six clinical detail entities, nested case creation/retrieval, and 10 fixed synthetic fixtures. Security remains a documented placeholder. RAG, agents, OpenClaw integration, provenance memory, trust and uncertainty engines, MCP servers, frontend, clinical decision logic, and adversarial evaluation remain deferred.
 
 ## Local backend development
 
@@ -112,12 +112,12 @@ From the repository root, with Python 3.12 and uv:
 ```bash
 uv sync --locked
 uv run pytest
-uv run ruff check backend alembic
-uv run ruff format --check backend alembic
+uv run ruff check backend scripts alembic
+uv run ruff format --check backend scripts alembic
 uv run uvicorn backend.app.main:app --reload --no-access-log
 ```
 
-No Docker, database, model runtime, API key, or actual `.env` file is needed. Settings optionally load `.env` from the working directory; environment variables take precedence. Supported settings are `MEDTRUST_ENV` (development/test/staging/production), `MEDTRUST_API_HOST` (127.0.0.1), `MEDTRUST_API_PORT` (8000), and `MEDTRUST_LOG_LEVEL` (INFO; uppercase standard levels). `DATABASE_URL` is optional and used only for explicit database operations. Other future service variables in `.env.example` are ignored.
+App startup, `/health`, and ordinary tests need no Docker, database, model runtime, API key, or actual `.env` file. Case endpoints require a configured, migrated database. Settings optionally load `.env` from the working directory; environment variables take precedence. Supported settings are `MEDTRUST_ENV` (development/test/staging/production), `MEDTRUST_API_HOST` (127.0.0.1), `MEDTRUST_API_PORT` (8000), and `MEDTRUST_LOG_LEVEL` (INFO; uppercase standard levels). `DATABASE_URL` is optional and used only for explicit database operations. Other future service variables in `.env.example` are ignored.
 
 Uvicorn CLI host/port options are separate from application settings. To launch using the configured host and port:
 
@@ -135,13 +135,13 @@ Expected default response:
 {"status":"ok","service":"medtrust-api","environment":"development","version":"0.1.0"}
 ```
 
-Health reports process liveness only. Application logs use JSON and fixed infrastructure events; never pass request contents, credentials, or patient information to logging calls. Server logs are configured separately; the commands disable access logs to avoid recording request URLs. Error responses omit exception details and validation inputs. Authentication is not implemented; only public infrastructure is available.
+Health reports process liveness only. Application logs use JSON and fixed infrastructure events; never pass request contents, credentials, or patient information to logging calls. Server logs are configured separately; the commands disable access logs to avoid recording request URLs. Error responses omit exception details and validation inputs. Authentication is not implemented; run the research API locally on loopback only.
 
 ## Local research database (Phase 3)
 
 PostgreSQL persistence is available for `ClinicalCase`, `AgentRun`, `EvidenceRecord`,
 and `AuditEvent`. These are research artifacts, not authoritative EHR records.
-No case ingestion API, dataset generation, agent execution, or retrieval is implemented.
+Phase 4 adds the research case API and fixed dataset below. Agent execution and evidence retrieval remain deferred.
 
 Copy `.env.example` to a local `.env` and replace both database password placeholders
 with the same local development password. URL-encode special characters in the URL
@@ -159,7 +159,7 @@ docker compose up -d postgres
 uv run alembic upgrade head
 uv run alembic current
 uv run alembic check
-# Destructive: removes the four research tables and their data.
+# Destructive: removes all research tables and their data; disposable databases only.
 uv run alembic downgrade base
 # Recreate the schema after the downgrade validation.
 uv run alembic upgrade head
@@ -171,8 +171,8 @@ Validate without Docker or a running database:
 ```bash
 uv sync
 uv run pytest
-uv run ruff check backend alembic
-uv run ruff format --check backend alembic
+uv run ruff check backend scripts alembic
+uv run ruff format --check backend scripts alembic
 uv run python -c 'from backend.app.main import app; assert app'
 uv run alembic heads
 # With DATABASE_URL configured, compile PostgreSQL SQL without connecting:
@@ -188,6 +188,58 @@ UUIDs and most defaults are assigned at SQLAlchemy insert/flush. UTC timestamps 
 stored using PostgreSQL timezone-aware columns. `updated_at` is maintained by
 SQLAlchemy updates, not a database trigger. Callers explicitly commit sessions;
 uncommitted transactions are rolled back when the dependency closes.
+
+## Synthetic clinical cases (Phase 4)
+
+Only synthetic or explicitly de-identified research data is accepted. Ingestion requires
+`source_type` (`synthetic` or `deidentified`) and an explicit `deidentified: true`.
+Public benchmark data must already be de-identified and permitted for use. Records
+are application-specific research artifacts, not authoritative EHR records.
+
+- `POST /api/v1/cases`: create metadata and optional patient profile, conditions,
+  observations, medications, allergies and notes atomically; returns **201**.
+- `GET /api/v1/cases/{case_id}`: retrieve the complete structured case by UUID;
+  returns **404** if absent. Duplicate external case references return **409**;
+  invalid inputs return **422**, without echoing clinical input or SQL details.
+- `/docs` and `/openapi.json` document the request and response schemas.
+  `/health` remains independent of database availability.
+
+From the repository root, after migration:
+
+```bash
+uv run python -m scripts.seed_synthetic_cases --validate-only
+uv run python -m scripts.seed_synthetic_cases
+# Rerun: inserted 0 / skipped 10; existing cases are never changed.
+uv run python -m scripts.seed_synthetic_cases
+# Separate live PostgreSQL checks, requiring the local Compose service:
+uv run python -m scripts.validate_local_postgres
+```
+
+The committed [dataset](datasets/synthetic/clinical_cases.json) contains exactly 10
+fixed software research scenarios. Case identifiers `CASE-001`–`CASE-010` and profile
+identifiers `SYN-P001`–`SYN-P010` are fictional. Clinical values and supplied event
+times are fixed; database UUIDs and ingestion timestamps are assigned on insertion.
+The seed command validates the entire dataset before writing, commits the batch
+atomically, and skips existing `external_case_id` values. It does not repair or
+replace existing records. Downgrading to `0001` drops detail records while preserving
+case containers, so perform reversibility checks before seeding; rerunning a seed
+after such a downgrade will skip those surviving containers.
+
+To submit one fixture, extract one object from the JSON array and send it as JSON to
+`POST /api/v1/cases`; obtain its database UUID from the response for retrieval.
+Medication entries are reported history, never prescriptions. Missing values and
+conflicting observations are retained without interpretation. There are no reference
+answers, generated diagnoses, treatment recommendations, or attack payloads.
+
+Unknown ingestion fields are forbidden at every resource level, including names,
+contact details and government identifier fields. Profiles use age, never exact DOB,
+and require a synthetic-format identifier. Notes are untrusted input for future
+agents; synthetic cases require synthetic notes. A non-synthetic note is eligible
+only within an explicitly de-identified case. Free text must be reviewed to exclude
+identifiers, secrets and private chain-of-thought; schema validation does not detect
+all identifiers embedded in prose.
+
+**This is a research guardrail, not a complete HIPAA/GDPR/DPDP de-identification system.**
 
 ## Medical disclaimer
 

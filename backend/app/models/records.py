@@ -8,7 +8,7 @@ cascades: historical runs, evidence and audit links must not disappear silently.
 from __future__ import annotations
 
 from datetime import date, datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from uuid import UUID, uuid4
 
 from sqlalchemy import JSON, Boolean, CheckConstraint, Date, ForeignKey, String, Text, Uuid, func
@@ -16,6 +16,16 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from backend.app.db.base import Base, UTCDateTime, utc_now
 from backend.app.models.enums import AgentRunStatus, AuditOutcome, CaseSourceType, enum_column
+
+if TYPE_CHECKING:
+    from backend.app.models.clinical_details import (
+        Allergy,
+        ClinicalNote,
+        Condition,
+        Medication,
+        Observation,
+        PatientProfile,
+    )
 
 
 class IdentityCreatedMixin:
@@ -37,6 +47,39 @@ class ClinicalCase(IdentityCreatedMixin, Base):
     deidentified: Mapped[bool] = mapped_column(Boolean, default=True)
     updated_at: Mapped[datetime] = mapped_column(
         UTCDateTime(), default=utc_now, onupdate=utc_now, server_default=func.now()
+    )
+    patient_profile: Mapped[PatientProfile | None] = relationship(
+        back_populates="clinical_case", cascade="save-update, merge", passive_deletes="all"
+    )
+    conditions: Mapped[list[Condition]] = relationship(
+        back_populates="clinical_case",
+        cascade="save-update, merge",
+        passive_deletes="all",
+        order_by="(Condition.created_at, Condition.id)",
+    )
+    observations: Mapped[list[Observation]] = relationship(
+        back_populates="clinical_case",
+        cascade="save-update, merge",
+        passive_deletes="all",
+        order_by="(Observation.created_at, Observation.id)",
+    )
+    medications: Mapped[list[Medication]] = relationship(
+        back_populates="clinical_case",
+        cascade="save-update, merge",
+        passive_deletes="all",
+        order_by="(Medication.created_at, Medication.id)",
+    )
+    allergies: Mapped[list[Allergy]] = relationship(
+        back_populates="clinical_case",
+        cascade="save-update, merge",
+        passive_deletes="all",
+        order_by="(Allergy.created_at, Allergy.id)",
+    )
+    clinical_notes: Mapped[list[ClinicalNote]] = relationship(
+        back_populates="clinical_case",
+        cascade="save-update, merge",
+        passive_deletes="all",
+        order_by="(ClinicalNote.created_at, ClinicalNote.id)",
     )
     agent_runs: Mapped[list[AgentRun]] = relationship(
         back_populates="clinical_case", passive_deletes="all"

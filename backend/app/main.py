@@ -25,7 +25,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         version=__version__,
         description=(
             "Research prototype for clinician-facing clinical decision support. "
-            "Infrastructure only; not an autonomous doctor, diagnostic or prescribing "
+            "Synthetic/de-identified research artifacts only; not a diagnostic or prescribing "
             "system, or production medical device. No medical recommendations."
         ),
         debug=False,

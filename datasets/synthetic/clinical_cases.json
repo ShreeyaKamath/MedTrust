@@ -1,0 +1,394 @@
+[
+  {
+    "external_case_id": "CASE-001",
+    "title": "Blood pressure monitoring",
+    "summary": "Fictional monitoring visit with a reported history of hypertension.",
+    "source_type": "synthetic",
+    "deidentified": true,
+    "patient_profile": {
+      "synthetic_patient_id": "SYN-P001",
+      "age_years": 54,
+      "recorded_sex": "female"
+    },
+    "conditions": [
+      {
+        "name": "Reported hypertension history",
+        "status": "active"
+      }
+    ],
+    "observations": [
+      {
+        "category": "vital-signs",
+        "name": "Systolic blood pressure",
+        "value_numeric": 138,
+        "unit": "mmHg"
+      },
+      {
+        "category": "vital-signs",
+        "name": "Diastolic blood pressure",
+        "value_numeric": 86,
+        "unit": "mmHg"
+      }
+    ],
+    "medications": [
+      {
+        "name": "Amlodipine",
+        "dose": "5",
+        "dose_unit": "mg",
+        "route": "oral",
+        "frequency": "once daily, reported",
+        "status": "active"
+      }
+    ],
+    "allergies": [],
+    "clinical_notes": [
+      {
+        "note_type": "synthetic-intake",
+        "content": "Synthetic intake reports routine monitoring. Medication details represent supplied history only.",
+        "synthetic": true,
+        "authored_at": "2026-02-01T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "external_case_id": "CASE-002",
+    "title": "Glucose follow-up",
+    "summary": "Fictional follow-up with recorded glucose measurements and reported diabetes history.",
+    "source_type": "synthetic",
+    "deidentified": true,
+    "patient_profile": {
+      "synthetic_patient_id": "SYN-P002",
+      "age_years": 61,
+      "recorded_sex": "male"
+    },
+    "conditions": [
+      {
+        "name": "Reported type 2 diabetes history",
+        "status": "active"
+      }
+    ],
+    "observations": [
+      {
+        "category": "laboratory",
+        "name": "Glucose",
+        "value_numeric": 156,
+        "unit": "mg/dL"
+      },
+      {
+        "category": "laboratory",
+        "name": "Hemoglobin A1c",
+        "value_numeric": 7.4,
+        "unit": "%"
+      }
+    ],
+    "medications": [
+      {
+        "name": "Metformin",
+        "dose": "500",
+        "dose_unit": "mg",
+        "route": "oral",
+        "frequency": "twice daily, reported",
+        "status": "active"
+      }
+    ],
+    "allergies": [],
+    "clinical_notes": [
+      {
+        "note_type": "synthetic-intake",
+        "content": "Synthetic history lists the medication as current. Meal timing for glucose was not supplied.",
+        "synthetic": true,
+        "authored_at": "2026-02-01T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "external_case_id": "CASE-003",
+    "title": "Hemoglobin laboratory pattern",
+    "summary": "Fictional fatigue report with two laboratory values; no diagnostic label assigned.",
+    "source_type": "synthetic",
+    "deidentified": true,
+    "patient_profile": {
+      "synthetic_patient_id": "SYN-P003",
+      "age_years": 29,
+      "recorded_sex": "female"
+    },
+    "conditions": [],
+    "observations": [
+      {
+        "category": "laboratory",
+        "name": "Hemoglobin",
+        "value_numeric": 10.2,
+        "unit": "g/dL"
+      },
+      {
+        "category": "laboratory",
+        "name": "Mean corpuscular volume",
+        "value_numeric": 74,
+        "unit": "fL"
+      }
+    ],
+    "medications": [],
+    "allergies": [],
+    "clinical_notes": [
+      {
+        "note_type": "synthetic-intake",
+        "content": "Synthetic narrative reports fatigue over several weeks. Prior laboratory results are unavailable.",
+        "synthetic": true,
+        "authored_at": "2026-02-01T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "external_case_id": "CASE-004",
+    "title": "Renal-function monitoring",
+    "summary": "Fictional serial creatinine measurements with fixed collection times.",
+    "source_type": "synthetic",
+    "deidentified": true,
+    "patient_profile": {
+      "synthetic_patient_id": "SYN-P004",
+      "age_years": 68,
+      "recorded_sex": "male"
+    },
+    "conditions": [],
+    "observations": [
+      {
+        "category": "laboratory",
+        "name": "Creatinine",
+        "value_numeric": 1.4,
+        "unit": "mg/dL",
+        "observed_at": "2026-01-01T09:00:00Z"
+      },
+      {
+        "category": "laboratory",
+        "name": "Creatinine",
+        "value_numeric": 1.6,
+        "unit": "mg/dL",
+        "observed_at": "2026-02-01T09:00:00Z"
+      }
+    ],
+    "medications": [],
+    "allergies": [],
+    "clinical_notes": [
+      {
+        "note_type": "synthetic-intake",
+        "content": "Synthetic monitoring record contains two supplied measurements. Hydration context is missing.",
+        "synthetic": true,
+        "authored_at": "2026-02-01T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "external_case_id": "CASE-005",
+    "title": "Reported medication allergy",
+    "summary": "Fictional medication allergy history with severity left unknown.",
+    "source_type": "synthetic",
+    "deidentified": true,
+    "patient_profile": {
+      "synthetic_patient_id": "SYN-P005",
+      "age_years": 42,
+      "recorded_sex": "female"
+    },
+    "conditions": [],
+    "observations": [
+      {
+        "category": "history",
+        "name": "Allergy history source",
+        "value_text": "Synthetic self-report"
+      }
+    ],
+    "medications": [],
+    "allergies": [
+      {
+        "substance": "Amoxicillin",
+        "reaction": "Reported rash",
+        "severity": "unknown",
+        "status": "active"
+      }
+    ],
+    "clinical_notes": [
+      {
+        "note_type": "synthetic-intake",
+        "content": "Synthetic history describes a prior rash after medication exposure. Timing details are unavailable.",
+        "synthetic": true,
+        "authored_at": "2026-02-01T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "external_case_id": "CASE-006",
+    "title": "Respiratory symptom record",
+    "summary": "Fictional cough report and supplied vital signs; cause is not assigned.",
+    "source_type": "synthetic",
+    "deidentified": true,
+    "patient_profile": {
+      "synthetic_patient_id": "SYN-P006",
+      "age_years": 35,
+      "recorded_sex": "male"
+    },
+    "conditions": [],
+    "observations": [
+      {
+        "category": "vital-signs",
+        "name": "Respiratory rate",
+        "value_numeric": 20,
+        "unit": "/min"
+      },
+      {
+        "category": "vital-signs",
+        "name": "Oxygen saturation",
+        "value_numeric": 97,
+        "unit": "%"
+      }
+    ],
+    "medications": [],
+    "allergies": [],
+    "clinical_notes": [
+      {
+        "note_type": "synthetic-intake",
+        "content": "Synthetic narrative reports cough for three days. No imaging or laboratory results were supplied.",
+        "synthetic": true,
+        "authored_at": "2026-02-01T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "external_case_id": "CASE-007",
+    "title": "Fever symptom record",
+    "summary": "Fictional temperature and heart-rate observations without etiologic labels.",
+    "source_type": "synthetic",
+    "deidentified": true,
+    "patient_profile": {
+      "synthetic_patient_id": "SYN-P007",
+      "age_years": 24,
+      "recorded_sex": "other"
+    },
+    "conditions": [],
+    "observations": [
+      {
+        "category": "vital-signs",
+        "name": "Temperature",
+        "value_numeric": 38.2,
+        "unit": "degC"
+      },
+      {
+        "category": "vital-signs",
+        "name": "Heart rate",
+        "value_numeric": 102,
+        "unit": "/min"
+      }
+    ],
+    "medications": [],
+    "allergies": [],
+    "clinical_notes": [
+      {
+        "note_type": "synthetic-intake",
+        "content": "Synthetic narrative reports fever since the prior day. No organism testing is included.",
+        "synthetic": true,
+        "authored_at": "2026-02-01T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "external_case_id": "CASE-008",
+    "title": "Medication history conflict",
+    "summary": "Fictional medication entries preserve conflicting reported status.",
+    "source_type": "synthetic",
+    "deidentified": true,
+    "patient_profile": {
+      "synthetic_patient_id": "SYN-P008",
+      "age_years": 57,
+      "recorded_sex": "female"
+    },
+    "conditions": [
+      {
+        "name": "Reported hypertension history",
+        "status": "historical"
+      }
+    ],
+    "observations": [],
+    "medications": [
+      {
+        "name": "Amlodipine",
+        "status": "active",
+        "start_date": "2025-12-01"
+      },
+      {
+        "name": "Amlodipine",
+        "status": "stopped",
+        "end_date": "2026-01-15"
+      }
+    ],
+    "allergies": [],
+    "clinical_notes": [
+      {
+        "note_type": "synthetic-intake",
+        "content": "Two synthetic source entries disagree about current medication status. Neither entry is selected as authoritative.",
+        "synthetic": true,
+        "authored_at": "2026-02-01T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "external_case_id": "CASE-009",
+    "title": "Missing laboratory information",
+    "summary": "Fictional follow-up record intentionally contains no laboratory measurements.",
+    "source_type": "synthetic",
+    "deidentified": true,
+    "patient_profile": {
+      "synthetic_patient_id": "SYN-P009",
+      "age_years": 47,
+      "recorded_sex": "unknown"
+    },
+    "conditions": [],
+    "observations": [],
+    "medications": [],
+    "allergies": [],
+    "clinical_notes": [
+      {
+        "note_type": "synthetic-intake",
+        "content": "Synthetic follow-up narrative mentions prior testing, but no results or medication details are available.",
+        "synthetic": true,
+        "authored_at": "2026-02-01T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "external_case_id": "CASE-010",
+    "title": "Conflicting observation record",
+    "summary": "Fictional observations disagree at the same recorded time; both are retained.",
+    "source_type": "synthetic",
+    "deidentified": true,
+    "patient_profile": {
+      "synthetic_patient_id": "SYN-P010",
+      "age_years": 63,
+      "recorded_sex": "male"
+    },
+    "conditions": [],
+    "observations": [
+      {
+        "category": "vital-signs",
+        "name": "Systolic blood pressure",
+        "value_numeric": 122,
+        "unit": "mmHg",
+        "observed_at": "2026-02-01T09:00:00Z"
+      },
+      {
+        "category": "vital-signs",
+        "name": "Systolic blood pressure",
+        "value_numeric": 158,
+        "unit": "mmHg",
+        "observed_at": "2026-02-01T09:00:00Z"
+      }
+    ],
+    "medications": [],
+    "allergies": [],
+    "clinical_notes": [
+      {
+        "note_type": "synthetic-intake",
+        "content": "Synthetic source entries contain different measurements. Device and measurement context are absent.",
+        "synthetic": true,
+        "authored_at": "2026-02-01T10:00:00Z"
+      }
+    ]
+  }
+]
