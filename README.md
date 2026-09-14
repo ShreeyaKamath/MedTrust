@@ -2,7 +2,7 @@
 
 **A Zero-Trust Multi-Agent Framework with Provenance-Aware Memory and Uncertainty-Guided Retrieval for Clinical Decision Support**
 
-An M.Tech research prototype for clinician-facing clinical decision support. **Phase 1 establishes the repository and proposed research architecture only.** No clinical functionality is implemented and no experimental results are available.
+An M.Tech research prototype for clinician-facing clinical decision support. **Phase 1 established the repository and proposed research architecture; Phase 2 adds the FastAPI backend foundation.** No clinical functionality is implemented and no experimental results are available.
 
 ## Research motivation and problem statement
 
@@ -55,15 +55,15 @@ MedTrust is not an autonomous doctor, diagnostic system, prescribing system, or 
 
 | Area | Phase 1 / planned direction |
 | --- | --- |
-| Research development | Python 3.12; optional pytest and Ruff tooling |
+| Research development | Python 3.12 and uv; pytest and Ruff tooling |
 | Agent orchestration | OpenClaw, proposed; integration deferred |
 | Tool interfaces | MCP; authenticated, least-privilege, initially read-only |
 | Retrieval and memory | Evidence retrieval and provenance-aware memory; storage and embedding choices deferred |
 | Trust and uncertainty | Research components; algorithms deferred |
-| Backend and frontend | Reserved directories; frameworks deferred |
+| Backend and frontend | FastAPI backend foundation; frontend deferred |
 | Infrastructure | Empty Compose services map; no services deployed |
 
-No application dependencies are installed in this phase. `pyproject.toml` is a non-distributable research workspace configuration with an optional development dependency group.
+`pyproject.toml` remains a non-distributable research workspace configuration. Phase 2 dependencies and development tools are pinned in `uv.lock`.
 
 ## Evaluation strategy
 
@@ -103,7 +103,39 @@ Empty component directories contain `.gitkeep` placeholders. See [architecture](
 
 ## Development status
 
-Phase 1 only: documentation, configuration, and directory placeholders. Backend logic, database models, RAG, agents, OpenClaw integration, trust algorithms, MCP servers, frontend, and clinical decision logic are deferred. There are no application tests or running services yet.
+Phase 2 provides FastAPI initialization, routing, typed settings, JSON application logging, safe error handling, a public liveness endpoint, and isolated backend tests. Database and security packages are documented placeholders. Database models, RAG, agents, OpenClaw integration, provenance memory, trust and uncertainty engines, MCP servers, frontend, clinical decision logic, and adversarial evaluation remain deferred.
+
+## Local backend development
+
+From the repository root, with Python 3.12 and uv:
+
+```bash
+uv sync --locked
+uv run pytest
+uv run ruff check backend
+uv run ruff format --check backend
+uv run uvicorn backend.app.main:app --reload --no-access-log
+```
+
+No Docker, database, model runtime, API key, or actual `.env` file is needed. Settings optionally load `.env` from the working directory; environment variables take precedence. Supported settings are `MEDTRUST_ENV` (development/test/staging/production), `MEDTRUST_API_HOST` (127.0.0.1), `MEDTRUST_API_PORT` (8000), and `MEDTRUST_LOG_LEVEL` (INFO; uppercase standard levels). Future service variables in `.env.example` are ignored.
+
+Uvicorn CLI host/port options are separate from application settings. To launch using the configured host and port:
+
+```bash
+uv run python -c 'import uvicorn; from backend.app.core.config import get_settings; s = get_settings(); uvicorn.run("backend.app.main:app", host=s.api_host, port=s.api_port, access_log=False)'
+```
+
+```bash
+curl http://127.0.0.1:8000/health
+```
+
+Expected default response:
+
+```json
+{"status":"ok","service":"medtrust-api","environment":"development","version":"0.1.0"}
+```
+
+Health reports process liveness only. Application logs use JSON and fixed infrastructure events; never pass request contents, credentials, or patient information to logging calls. Server logs are configured separately; the commands disable access logs to avoid recording request URLs. Error responses omit exception details and validation inputs. Authentication is not implemented; only public infrastructure is available.
 
 ## Medical disclaimer
 

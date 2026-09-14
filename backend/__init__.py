@@ -1,0 +1,1 @@
+"""MedTrust backend package."""
