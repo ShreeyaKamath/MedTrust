@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-006",
+  "title": "Respiratory symptom descriptions",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:006",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "Respiratory symptom records can preserve reported cough duration and the wording used to describe breathing discomfort. Respiratory rate and oxygen saturation are distinct supplied observations with their own units. A symptom narrative is not interchangeable with a device measurement. A fictional record may omit imaging, onset time, or measurement conditions. Those omissions are documented without an inferred cause of cough. Evidence retrieval can locate descriptions of respiratory record structure and observation provenance. The research exercise does not classify severity, identify an illness, or produce instructions for care. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}

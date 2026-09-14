@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-009",
+  "title": "Missing data and absent laboratory results",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:009",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "Missing data documentation distinguishes an unrecorded value from an explicitly negative observation. A narrative mentioning prior testing does not supply the absent laboratory result. Empty lists and unknown fields are retained without filling them with plausible values. In the fictional research format, unavailable specimen dates and missing units can be described separately. Retrieval can return a passage about absence of information, but cannot recover facts that are not in the corpus. A missing field is not a finding about the person. This text concerns representation rather than imputation. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}

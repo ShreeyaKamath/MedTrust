@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-018",
+  "title": "Reported history versus observed measurements",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:018",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "Reported history identifies an assertion attributed to a narrative source. An observed measurement identifies a supplied observation with its collection context. These labels describe how information entered a fictional record, not whether either source is correct. A note can contain both reported symptoms and copied measurements with separate attribution. Retrieval experiments can seek passages about separating history from observation. Repetition of a reported assertion does not convert it into a verified event. This research document concerns representation only and does not infer a condition from either type of entry. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}

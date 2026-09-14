@@ -65,3 +65,34 @@ Report undefined denominators as N/A with counts. ECE bins, retrieval K, relevan
 ## Analysis and reproducibility
 
 Use paired comparisons on identical cases and case-level bootstrap confidence intervals; account for clustered episodes and repeated runs. Report effect sizes, distributions, failures, and multiplicity handling for secondary comparisons. Ablate provenance, trust channels, uncertainty-guided retrieval, critic, and gateway separately, including budget-matched controls. Publish permitted case definitions, configuration manifests, corpus versions, and aggregate results with traceable run IDs. Never fabricate results; no experiments or measured outcomes exist in Phase 1.
+
+## Phase 5 retrieval-only benchmark
+
+The fixed synthetic corpus has 20 repository-authored documents and 25 author-defined
+queries, including paraphrases and multi-document labels. These are exploratory
+software/topic judgments, not independent clinical adjudication or held-out medical
+validation. No answer-generation labels are used. Retrieval relevance != clinical validity.
+
+`scripts.evaluate_retrieval` compares sparse BM25, local dense retrieval, hybrid RRF,
+and hybrid plus deterministic lexical reranking. Each mode uses the same corpus,
+queries and candidate budget. Dense search is exact for this small corpus; ties sort
+by stable chunk ID. Evaluation requests up to 100 chunks, collapses duplicate document
+IDs preserving the first occurrence, then measures document-level rankings. MRR is
+untruncated over that returned candidate pool (not necessarily the whole corpus when
+larger than 100 chunks). Recall@1/@3/@5 and nDCG@5 use the deduplicated document ranks.
+
+Recall@K = distinct relevant documents in top K / all labeled relevant documents.
+MRR = mean reciprocal rank of the first relevant document, with zero for a miss.
+Binary DCG@K = sum of 1/log2(rank+1) at relevant ranks, and nDCG@K divides by the
+ideal DCG for min(K, number of relevant documents). Empty relevance sets are rejected
+as undefined; empty retrieved rankings score zero. Repeated document chunks cannot
+increase relevance credit. Report query count and all five aggregate metrics.
+
+JSON output records corpus fingerprint, model identity/revision, dimension, collection,
+chunk settings, candidate budget, fusion constant and whether the run is live-local
+or local-sparse. Store generated results in the ignored experiment results directory.
+Offline tests use deterministic fake embeddings and Qdrant's in-memory client only;
+those checks are not real-model benchmark evidence. Freeze dependency lock, corpus,
+queries and model revision for repeat runs. Numerical reproducibility across different
+hardware/library versions is not guaranteed by inference mode alone. No clinical
+performance claim follows from these small corpus metrics.

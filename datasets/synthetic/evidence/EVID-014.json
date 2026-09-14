@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-014",
+  "title": "Uncertainty documentation without scoring",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:014",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "Uncertainty documentation can describe which contextual details are absent and which assertions conflict. This synthetic text uses descriptive statements rather than numerical confidence, probability, or a risk score. A research note can distinguish lack of evidence from disagreement between available sources. Retrieval does not resolve either limitation by returning a fluent passage. Uncertainty language in a document is part of the source text, not a computed system assessment. This topic is included to evaluate searches about limitations and unresolved information. No uncertainty engine or decision threshold is defined. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}

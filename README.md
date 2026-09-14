@@ -2,7 +2,7 @@
 
 **A Zero-Trust Multi-Agent Framework with Provenance-Aware Memory and Uncertainty-Guided Retrieval for Clinical Decision Support**
 
-An M.Tech research prototype for clinician-facing clinical decision support. **Phase 1 established the repository and proposed research architecture; Phase 2 adds the FastAPI backend foundation; Phase 3 adds PostgreSQL persistence; Phase 4 adds synthetic clinical-case intake and storage.** No clinical reasoning is implemented and no experimental results are available.
+An M.Tech research prototype for clinician-facing clinical decision support. **Phase 1 established the repository and proposed research architecture; Phase 2 adds the FastAPI backend foundation; Phase 3 adds PostgreSQL persistence; Phase 4 adds synthetic clinical-case intake and storage; Phase 5 adds medical evidence retrieval.** No clinical reasoning is implemented and no experimental results are available.
 
 ## Research motivation and problem statement
 
@@ -103,7 +103,7 @@ Empty component directories contain `.gitkeep` placeholders. See [architecture](
 
 ## Development status
 
-Phase 2 provides FastAPI initialization, routing, typed settings, JSON application logging, safe error handling, a public liveness endpoint, and isolated backend tests. Phase 3 adds SQLAlchemy models, internal Pydantic contracts, lazy sessions, and Alembic migrations. Phase 4 adds six clinical detail entities, nested case creation/retrieval, and 10 fixed synthetic fixtures. Security remains a documented placeholder. RAG, agents, OpenClaw integration, provenance memory, trust and uncertainty engines, MCP servers, frontend, clinical decision logic, and adversarial evaluation remain deferred.
+Phase 2 provides FastAPI initialization, routing, typed settings, JSON application logging, safe error handling, a public liveness endpoint, and isolated backend tests. Phase 3 adds SQLAlchemy models, internal Pydantic contracts, lazy sessions, and Alembic migrations. Phase 4 adds six clinical detail entities, nested case creation/retrieval, and 10 fixed synthetic fixtures. Security remains a documented placeholder. Agents, OpenClaw integration, provenance memory, trust and uncertainty engines, MCP servers, frontend, clinical decision logic, and adversarial evaluation remain deferred.
 
 ## Local backend development
 
@@ -141,7 +141,7 @@ Health reports process liveness only. Application logs use JSON and fixed infras
 
 PostgreSQL persistence is available for `ClinicalCase`, `AgentRun`, `EvidenceRecord`,
 and `AuditEvent`. These are research artifacts, not authoritative EHR records.
-Phase 4 adds the research case API and fixed dataset below. Agent execution and evidence retrieval remain deferred.
+Phase 4 adds the research case API and fixed dataset below. Agent execution remains deferred; Phase 5 evidence retrieval is independent of case storage.
 
 Copy `.env.example` to a local `.env` and replace both database password placeholders
 with the same local development password. URL-encode special characters in the URL
@@ -244,3 +244,59 @@ all identifiers embedded in prose.
 ## Medical disclaimer
 
 This repository is an unevaluated research prototype, not medical advice. It must not be used to diagnose, prescribe, or make autonomous treatment decisions. Any future evidence report requires review by a qualified clinician. No clinical efficacy, clinical safety validation, or regulatory approval is claimed.
+
+## Medical evidence retrieval (Phase 5)
+
+Phase 5 adds independent evidence ingestion, deterministic chunking, local CPU
+embeddings, Qdrant dense search, BM25, reciprocal rank fusion, lexical reranking,
+and retrieval evaluation. No clinical reasoning or recommendations are generated.
+**Retrieval relevance != clinical validity.** Source hashes identify content, not
+clinical truth. The [corpus](datasets/synthetic/evidence/README.md) contains only
+20 repository-authored MIT synthetic research documents and 25 topic queries.
+
+```bash
+uv sync
+docker compose config --quiet
+docker compose up -d qdrant
+curl --fail http://127.0.0.1:6333/readyz
+uv run python -m scripts.index_synthetic_evidence --validate-only
+uv run python -m scripts.evaluate_retrieval --validate-only
+uv run python -m scripts.index_synthetic_evidence
+uv run python -m scripts.evaluate_retrieval --output evaluation/experiments/results/retrieval.json
+# Offline lexical benchmark: no Qdrant or model download.
+uv run python -m scripts.evaluate_retrieval --sparse-only
+uv run pytest
+uv run ruff check backend rag scripts alembic
+uv run ruff format --check backend rag scripts alembic
+```
+
+The first embedding run downloads `sentence-transformers/all-MiniLM-L6-v2` from
+Hugging Face. No API key is needed. Inference is normalized, CPU-only and batched;
+the model has 384 dimensions. Model/revision, chunk size/overlap, default top K,
+RRF constant, collection and Qdrant URL are configurable in `.env.example`.
+The default model revision is pinned; changing models requires also setting the
+matching revision. Inputs exceeding the model token limit fail instead of truncating.
+Dependencies include PyTorch transitively and may require substantial disk space.
+
+Qdrant binds only `127.0.0.1:6333` and persists to the named `qdrant_data` volume.
+It is unauthenticated local development infrastructure, not production security.
+Host `/readyz` checks avoid assuming curl exists in the upstream image. PostgreSQL
+is not needed for retrieval; Compose still reads its existing password setting.
+No Qdrant/model initialization occurs during app startup or ordinary tests.
+
+Use `rag.retrieval.service.RetrievalService.retrieve_evidence(query, top_k=5,
+mode="hybrid", reranking=False)` after explicitly constructing the sparse and dense
+retrievers over the same chunks. `rag.runtime.load_chunks` and `build_dense` provide
+script composition. Pass `settings.rag_top_k` when using the configured default.
+Results include source fields, text, component scores/ranks, fusion and rerank scores,
+and final rank. Explicit sparse mode works without dense infrastructure; hybrid
+fails if dense is unavailable. The optional HTTP endpoint is intentionally omitted.
+
+Indexing is idempotent for an identical snapshot. Different corpus snapshots are
+retained and filtered separately, including metadata changes. Incomplete snapshots
+fail search until reindexed. Model identity is encoded in the collection vector
+name; incompatible dimensions, distance or models are rejected. Use a new collection
+for a different model. Only the explicit destructive indexing `--recreate` flag
+deletes the selected collection. No automatic cleanup or PostgreSQL chunk storage
+is implemented. This small-corpus baseline uses exact dense search and stable ID
+tie-breaking; scaling and concurrent snapshot lifecycle management are future work.

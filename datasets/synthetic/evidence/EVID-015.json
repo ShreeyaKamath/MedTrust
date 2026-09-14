@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-015",
+  "title": "Laboratory units and reference intervals",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:015",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "Laboratory documentation pairs each numeric value with its supplied unit. A reference interval belongs to a named laboratory and context rather than every possible measurement with the same name. Two entries with different units are not treated as directly comparable strings of numbers. The synthetic representation preserves each original value and interval without converting units or inferring a category. Retrieval queries may seek how units and reference intervals are attributed. Missing interval information remains missing. This document contains no normal ranges, diagnostic cutoffs, or treatment targets. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}

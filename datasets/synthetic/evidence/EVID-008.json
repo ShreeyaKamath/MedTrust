@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-008",
+  "title": "Medication reconciliation and status conflicts",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:008",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "Medication reconciliation documentation compares supplied lists and their sources. An active status in one list and a stopped status in another are retained as separate assertions with timestamps. A research representation does not automatically select the newer list as correct. Reported use, list membership, and confirmed administration are distinct concepts. A fictional reconciliation worksheet can record that status remains unresolved. Retrieval experiments seek the document about disagreement between medication lists. The text contains no instructions to start, stop, substitute, or change any medication. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}

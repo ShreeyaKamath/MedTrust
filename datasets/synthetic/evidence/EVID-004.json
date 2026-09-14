@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-004",
+  "title": "Creatinine and renal monitoring chronology",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:004",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "Creatinine monitoring records preserve collection dates and reported units alongside each laboratory value. Renal monitoring chronology refers to the ordering of supplied observations over time. Hydration context and the source laboratory may be absent from a fictional entry. Retrieval cannot reconstruct these omitted facts. A later creatinine entry does not erase an earlier value. Differences between entries remain observations without a generated explanation. Research queries may seek documentation of serial renal measurements, collection dates, or unavailable context. No kidney function calculation or clinical classification is provided here. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}

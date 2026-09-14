@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-001",
+  "title": "Blood pressure monitoring context",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:001",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "Blood pressure documentation distinguishes systolic and diastolic observations. Measurement position, cuff description, device source, and collection time are separate context fields. A repeated reading is a separate observation rather than a replacement for an earlier entry. A fictional monitoring form may contain values without the measurement conditions. Those conditions remain absent in the research representation. Comparing entries requires attention to units and timing. The retrieval topic concerns how pressure observations are described, not classification of a person or a threshold for action. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}

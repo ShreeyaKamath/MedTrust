@@ -15,5 +15,14 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+  qdrant:
+    image: qdrant/qdrant:v1.19.1
+    ports:
+      - "127.0.0.1:6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    # Readiness: curl --fail http://127.0.0.1:6333/readyz from the host.
+    # The upstream image does not guarantee curl/wget for an in-container check.
 volumes:
+  qdrant_data:
   postgres_data:

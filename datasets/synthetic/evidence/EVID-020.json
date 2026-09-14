@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-020",
+  "title": "Negative findings and unknown status",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:020",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "An explicitly recorded negative finding is distinct from an unknown status. A blank allergy list in a fictional dataset does not necessarily mean an explicit statement of no allergies was supplied. Similarly, absence of a symptom in a note differs from a source reporting that the symptom was absent. The research representation retains these distinctions without filling gaps. Retrieval queries can seek documentation of negative assertions and unknown fields. This document is a synthetic explanation of representation semantics, not a claim about any patient or a rule for clinical decision making. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}

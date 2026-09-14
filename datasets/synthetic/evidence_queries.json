@@ -1,0 +1,180 @@
+[
+  {
+    "query_id": "Q-001",
+    "query": "blood pressure cuff position and repeated readings",
+    "relevant_document_ids": [
+      "EVID-001"
+    ]
+  },
+  {
+    "query_id": "Q-002",
+    "query": "glucose fasting state meal timing specimen",
+    "relevant_document_ids": [
+      "EVID-002"
+    ]
+  },
+  {
+    "query_id": "Q-003",
+    "query": "hemoglobin reference interval mean corpuscular volume",
+    "relevant_document_ids": [
+      "EVID-003"
+    ]
+  },
+  {
+    "query_id": "Q-004",
+    "query": "creatinine renal serial measurements collection dates",
+    "relevant_document_ids": [
+      "EVID-004"
+    ]
+  },
+  {
+    "query_id": "Q-005",
+    "query": "allergy rash reaction timing unknown severity",
+    "relevant_document_ids": [
+      "EVID-005"
+    ]
+  },
+  {
+    "query_id": "Q-006",
+    "query": "cough duration respiratory rate breathing symptoms",
+    "relevant_document_ids": [
+      "EVID-006"
+    ]
+  },
+  {
+    "query_id": "Q-007",
+    "query": "fever temperature device organism testing context",
+    "relevant_document_ids": [
+      "EVID-007"
+    ]
+  },
+  {
+    "query_id": "Q-008",
+    "query": "medication reconciliation active stopped conflicting lists",
+    "relevant_document_ids": [
+      "EVID-008"
+    ]
+  },
+  {
+    "query_id": "Q-009",
+    "query": "missing laboratory results absent versus negative",
+    "relevant_document_ids": [
+      "EVID-009"
+    ]
+  },
+  {
+    "query_id": "Q-010",
+    "query": "contradictory observations same timestamp different values",
+    "relevant_document_ids": [
+      "EVID-010"
+    ]
+  },
+  {
+    "query_id": "Q-011",
+    "query": "documentation quality copied notes source attribution",
+    "relevant_document_ids": [
+      "EVID-011"
+    ]
+  },
+  {
+    "query_id": "Q-012",
+    "query": "evidence provenance content hash publisher version",
+    "relevant_document_ids": [
+      "EVID-012"
+    ]
+  },
+  {
+    "query_id": "Q-013",
+    "query": "clinician review handoff unresolved question sources",
+    "relevant_document_ids": [
+      "EVID-013"
+    ]
+  },
+  {
+    "query_id": "Q-014",
+    "query": "uncertainty documentation lack of evidence disagreement",
+    "relevant_document_ids": [
+      "EVID-014"
+    ]
+  },
+  {
+    "query_id": "Q-015",
+    "query": "laboratory units reference intervals source comparability",
+    "relevant_document_ids": [
+      "EVID-015"
+    ]
+  },
+  {
+    "query_id": "Q-016",
+    "query": "collection authorship ingestion time chronological order",
+    "relevant_document_ids": [
+      "EVID-016"
+    ]
+  },
+  {
+    "query_id": "Q-017",
+    "query": "evidence publication retrieval date revised edition",
+    "relevant_document_ids": [
+      "EVID-017"
+    ]
+  },
+  {
+    "query_id": "Q-018",
+    "query": "reported history versus observed measurement attribution",
+    "relevant_document_ids": [
+      "EVID-018"
+    ]
+  },
+  {
+    "query_id": "Q-019",
+    "query": "oxygen saturation percentage device signal quality",
+    "relevant_document_ids": [
+      "EVID-019"
+    ]
+  },
+  {
+    "query_id": "Q-020",
+    "query": "negative findings unknown blank allergy list",
+    "relevant_document_ids": [
+      "EVID-020"
+    ]
+  },
+  {
+    "query_id": "Q-021",
+    "query": "How can I distinguish when a sample was taken from when the record arrived?",
+    "relevant_document_ids": [
+      "EVID-016"
+    ]
+  },
+  {
+    "query_id": "Q-022",
+    "query": "Where is disagreement about current drug use preserved?",
+    "relevant_document_ids": [
+      "EVID-008"
+    ]
+  },
+  {
+    "query_id": "Q-023",
+    "query": "Does an empty field mean an explicitly absent finding?",
+    "relevant_document_ids": [
+      "EVID-009",
+      "EVID-020"
+    ]
+  },
+  {
+    "query_id": "Q-024",
+    "query": "Which details let a passage be traced to an edition and origin?",
+    "relevant_document_ids": [
+      "EVID-012",
+      "EVID-017"
+    ]
+  },
+  {
+    "query_id": "Q-025",
+    "query": "Find documentation about breathing observations and sensor conditions",
+    "relevant_document_ids": [
+      "EVID-006",
+      "EVID-019"
+    ]
+  }
+]

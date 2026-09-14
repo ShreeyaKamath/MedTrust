@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-012",
+  "title": "Evidence provenance and content identity",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:012",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "Evidence provenance records a title, source reference, publisher or origin, publication date, and version where supplied. A cryptographic content hash identifies canonical text and can detect a content change relative to a known digest. It does not authenticate a publisher or establish that the text is correct. Retrieval scores indicate similarity to a query, not clinical authority. A fictional evidence card can retain these source fields through chunking and search. Provenance supports tracing a passage back to its document. Clinical validity requires separate assessment outside this retrieval experiment. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}

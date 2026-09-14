@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-013",
+  "title": "Clinician review handoff documentation",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:013",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "A clinician review handoff record can identify the unresolved question, the supplied source references, and the information that remains unavailable. In this synthetic educational text, a handoff is a documentation artifact rather than an executed escalation. The record may identify that human review has not yet occurred. Retrieval of this topic does not contact a clinician or set a triage priority. No urgency rule or recommended clinical action is included. The research focus is traceability of a question and its supporting documents across a recorded review boundary. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}

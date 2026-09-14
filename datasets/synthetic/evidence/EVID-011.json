@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-011",
+  "title": "Clinical documentation quality",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:011",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "Documentation quality in this research corpus concerns completeness of attribution and clarity of representation. A note can distinguish supplied observations, reported history, and absent information. Repeated copied wording is not independent corroboration. An entry without a source or collection time may be difficult to trace even when its language is fluent. The fictional quality checklist describes fields, not a numerical reliability score. Retrieval experiments use this passage to find discussion of clear attribution and copied notes. No clinical correctness or trust assessment is performed by this document. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}

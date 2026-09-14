@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-010",
+  "title": "Contradictory clinical observations",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:010",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "Contradictory observations are represented as distinct source assertions. Two fictional entries may share a measurement name and time but contain different supplied values. Both entries retain device context and source reference where available. Their disagreement is not resolved by counting copies or averaging values. A research record can link the entries for review without selecting an authoritative version. Retrieval of this topic describes preservation of conflicts in documentation. It does not establish which observation reflects reality and does not compute a clinical conclusion from inconsistent information. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}

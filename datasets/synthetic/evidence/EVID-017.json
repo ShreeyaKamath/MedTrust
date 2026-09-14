@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-017",
+  "title": "Evidence versions and publication dates",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:017",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "An evidence version identifies a particular edition of repository text. Publication date and retrieval date are separate metadata fields. A recently retrieved document may have an older publication date. A revised document can preserve a link to a prior version while receiving a different content hash. The synthetic corpus uses fixed versions to make retrieval experiments repeatable. Version metadata does not by itself establish freshness for a clinical question. This passage supports searches about document editions and date distinctions. No automatic preference for the newest text is claimed. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}

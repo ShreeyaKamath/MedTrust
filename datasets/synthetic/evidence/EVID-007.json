@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-007",
+  "title": "Fever and temperature documentation",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:007",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "Fever narratives and measured temperature entries describe different aspects of a record. A synthetic narrative may mention feeling warm without supplying a thermometer value. Temperature observations preserve unit, collection time, device context, and source when available. An organism test has its own result status and specimen provenance; absence of that test does not establish an infectious cause. Retrieval tasks focus on these documentation distinctions. The fictional text does not decide why a temperature was recorded or assign an infection label. No management pathway is represented. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}

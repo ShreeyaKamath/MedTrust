@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-019",
+  "title": "Oxygen saturation device context",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:019",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "Oxygen saturation documentation preserves the reported percentage, device source, and measurement time when supplied. A fictional entry may lack details about measurement conditions or signal quality. Those absent details are not inferred from the number. Oxygen saturation and a narrative about breathing discomfort remain distinct records even when collected during the same encounter. This research passage supports retrieval about device context and missing measurement information. It includes no threshold for intervention, physiological interpretation, or diagnostic classification. Similarity to a query does not make a retrieved observation reliable. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}

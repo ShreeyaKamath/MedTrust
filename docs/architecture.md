@@ -44,7 +44,7 @@ Each output will contain claims, evidence, citations/provenance, missing informa
 
 ## Evidence retrieval
 
-Future ingestion, embeddings, retrieval, and reranking will retain source identifiers, publication/version dates, retrieval times, passages, and applicability metadata. Retrieval will seek disconfirming as well as supporting evidence. Source quality, freshness, and entailment must be assessed separately from retrieval rank. A high similarity score is not evidence correctness. Untrusted document instructions must not affect policies or tool authority.
+Phase 5 ingestion, embeddings, retrieval, and reranking retain source identifiers, publication/version dates, retrieval times, passages, and applicability metadata. Retrieval will seek disconfirming as well as supporting evidence. Source quality, freshness, and entailment must be assessed separately from retrieval rank. A high similarity score is not evidence correctness. Untrusted document instructions must not affect policies or tool authority.
 
 ## Provenance-aware memory
 
@@ -95,8 +95,8 @@ logging is disabled. App import, startup and `/health` do not connect to a datab
   nullable. No execution, state machine or hidden chain-of-thought storage exists.
 - **EvidenceRecord** stores source references, publication/retrieval dates, a caller
   supplied content hash (use an algorithm-prefixed value such as `sha256:...`) and
-  provenance JSON. A nullable case link permits shared source metadata. No documents
-  are ingested, no hashes are computed, and no provenance/trust scoring is implemented.
+  provenance JSON. A nullable case link permits shared source metadata. This persistence model does not ingest documents or compute hashes; Phase 5 does
+  so independently in rag/. No provenance/trust scoring is implemented.
 - **AuditEvent** records actor/action/outcome and optional case/run/resource references.
   Nullable links support system-level events. When both case and run are supplied,
   callers must keep their case association consistent; cross-link enforcement is deferred.
@@ -183,3 +183,34 @@ It verifies the database matches the loopback MedTrust Compose development servi
 The ingestion declaration and unknown-field rejection do not prove that prose is
 free of identifiers. Dataset eligibility and narrative review remain required.
 **This is a research guardrail, not a complete HIPAA/GDPR/DPDP de-identification system.**
+
+## Phase 5 evidence retrieval foundation
+
+Implemented independently of case intake and FastAPI startup:
+
+```text
+Reviewed local evidence JSON -> validation + canonical SHA-256 -> word chunks
+  -> local normalized sentence-transformer embeddings -> Qdrant cosine search
+  -> local BM25 lexical index                         -> lexical search
+                          -> reciprocal rank fusion -> optional lexical reranking
+                          -> ranked structured evidence with complete provenance
+```
+
+Provenance fields (including arbitrary reviewed metadata, nullable dates,
+jurisdiction and document version) travel inside each chunk payload and result.
+The SHA-256 content hash covers NFC-normalized, whitespace-collapsed UTF-8 content;
+chunk IDs additionally include document/version and window configuration. A corpus
+fingerprint covers every chunk and its metadata, scopes Qdrant search and checks
+that the dense and sparse corpus match. Hashes are not source authentication.
+**Retrieval relevance != clinical validity.** No trust/uncertainty scores or clinical
+memory are computed. The Phase 3 EvidenceRecord remains an independent audit-oriented
+model; the retrieval index lives only in Qdrant. No agents, MCP or diagnosis API
+are introduced. The optional search endpoint is omitted to avoid coupling the app
+to model downloads and Qdrant availability.
+
+BM25 uses lowercase alphanumeric tokens, k1=1.5 and b=0.75 over title plus chunk text.
+Dense embedding uses chunk text. Fusion sums 1/(60 + one-based rank), with configurable
+constant, unique chunk IDs and deterministic ID ties. Default candidate limit is 100
+per branch. The optional reranker adds 0.10 times query-term title coverage and 0.05
+times query-term text coverage to the fusion score. These are transparent relevance
+heuristics, not clinical confidence. Non-reranked results have rerank_score=0.

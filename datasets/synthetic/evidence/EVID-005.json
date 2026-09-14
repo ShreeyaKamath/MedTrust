@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-005",
+  "title": "Medication allergy documentation",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:005",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "Medication allergy documentation separates a reported substance, reaction description, timing, and severity statement. Unknown severity is distinct from a supplied mild or severe label. A synthetic allergy history may describe a rash while omitting the interval between exposure and reaction. The source of that history remains attached to the entry. Retrieval of an allergy document cannot verify that the reaction occurred or establish causation. This research text concerns fields and attribution in a fictional medication allergy record. It does not select alternative medication or propose a treatment. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}

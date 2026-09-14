@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-002",
+  "title": "Glucose monitoring and meal timing",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:002",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "Glucose observation records may describe a laboratory specimen or a sensor reading. Meal timing and specimen collection time are distinct details in a synthetic monitoring record. An unspecified fasting state remains unspecified. A glucose entry includes its reported unit and source so that readers can identify the original representation. Serial entries do not become equivalent merely because they share the word glucose. Retrieval experiments can ask about meal context without inferring a metabolic condition. This document describes representation of supplied measurements and contains no numerical targets. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "document_id": "EVID-016",
+  "title": "Observation timestamps and event order",
+  "source_type": "synthetic",
+  "source_reference": "urn:medtrust:synthetic:evidence:016",
+  "publisher_or_origin": "MedTrust repository authors",
+  "publication_date": "2026-02-01",
+  "jurisdiction": null,
+  "version": "1.0",
+  "retrieved_at": null,
+  "content": "Collection time, note authorship time, and ingestion time describe different events. A fictional record may arrive after the observation was collected. Sorting by ingestion time alone does not necessarily reproduce the order of measurements. Timezone information and original event labels remain useful provenance fields. When a collection time is unavailable, the research representation leaves it absent. Retrieval can locate this explanation of event chronology without estimating missing dates. The topic concerns temporal documentation and does not determine whether an observation remains clinically applicable. Synthetic research evidence only. Retrieval relevance != clinical validity.",
+  "metadata": {
+    "license": "MIT",
+    "purpose": "retrieval software evaluation",
+    "repository_authored": true
+  }
+}
