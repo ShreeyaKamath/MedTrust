@@ -96,3 +96,19 @@ those checks are not real-model benchmark evidence. Freeze dependency lock, corp
 queries and model revision for repeat runs. Numerical reproducibility across different
 hardware/library versions is not guaranteed by inference mode alone. No clinical
 performance claim follows from these small corpus metrics.
+
+## Phase 6 orchestration baseline
+
+Six narrowly scoped roles establish the infrastructure for later multi-agent studies:
+history, lab, medication, evidence, critic and coordinator. The workflow is fixed,
+bounded and fails on invalid output, runtime errors or retrieval failure. It does not
+implement the full B2 clinical reasoning behavior or subsequent research contributions.
+
+A deterministic mock projects supplied fixture data into structured outputs without
+an LLM. This baseline measures software contract, role-order and provenance-handoff
+correctness, not clinical reasoning quality. Mock output timestamps are fixed; actual
+orchestration IDs/timings vary. Phase 5's sparse mode enables reproducible offline runs.
+Execution traces record observable state transitions, input hashes, counts, timing,
+runtime labels and sanitized failures. No private chain-of-thought is recorded.
+Live OpenClaw inference, when explicitly validated, must be reported separately from
+mock tests; passing offline tests does not establish real-model safety or effectiveness.

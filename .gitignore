@@ -68,3 +68,8 @@ compose.override.yaml
 !/datasets/synthetic/evidence/README.md
 !/datasets/synthetic/evidence_queries.json
 /evaluation/experiments/results/
+
+# OpenClaw private state is never repository data.
+.openclaw/
+/openclaw/workspaces/
+/openclaw/state/

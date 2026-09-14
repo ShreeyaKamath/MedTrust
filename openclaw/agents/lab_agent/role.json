@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0",
+  "role": "lab_agent",
+  "agent_id": "medtrust-lab",
+  "responsibility": "Inventory supplied observations, units, missing values and inconsistencies. Copy reference ranges only if supplied; never invent them. Ask evidence questions. Do not diagnose.",
+  "skills": [],
+  "tools": []
+}

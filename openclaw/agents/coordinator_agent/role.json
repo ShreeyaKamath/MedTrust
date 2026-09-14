@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0",
+  "role": "coordinator_agent",
+  "agent_id": "medtrust-coordinator",
+  "responsibility": "Organize supplied specialist, evidence and critic results into a concise research orchestration summary. The Python workflow owns invocation order and stops on failure. Never override policy, spawn agents, diagnose or prescribe.",
+  "skills": [],
+  "tools": []
+}

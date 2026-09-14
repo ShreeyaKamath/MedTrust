@@ -50,3 +50,22 @@ Initial MCP tools are **read-only**, restricted to approved research resources. 
 ## Evaluation containment
 
 Use local synthetic/de-identified cases and mock agents/tools. Never attack real healthcare systems or use real patient records. Record structured findings and concise policy reasons, not internal reasoning traces. Phase 1 contains no attack payloads, running tools, or implemented mitigations.
+
+## Phase 6 implemented boundaries and residual risks
+
+| Threat | Phase 6 control | Remaining limit |
+| --- | --- | --- |
+| Case/evidence prompt injection | Delimited, escaped untrusted JSON; explicit instruction hierarchy; no tools | Prompt wording does not guarantee model obedience |
+| Agent role confusion/output spoofing | Validate role, agent ID, run ID and case ID against host task | No cryptographic agent authentication yet |
+| Malformed outputs | Bounded strict JSON, forbidden unknown fields, nested Pydantic validation, fail closed | Free-text semantics still require human review |
+| Fabricated citations | Exact membership checks against supplied provenance | Citation membership does not prove entailment or source authenticity |
+| Subprocess injection | Explicit argv, stdin prompt, no shell, ID validation | Compromised executable/host is outside this boundary |
+| Excessive privileges | Pinned native harness, deny all tools, empty skills, plugins disabled | Other OpenClaw entry points do not inherit MedTrust restrictions |
+| Resource exhaustion | Per-command deadline, combined output bound, process-group termination, fixed workflow | Retrieval retains its Phase 5 limits; no global research budget engine |
+| Sensitive trace leakage | Hashes/counts and fixed error categories; no raw stderr/prompts in audit | Input eligibility declarations are not complete de-identification |
+| Session/context contamination | Ephemeral exec state, disabled bootstrap/startup/context/memory search | OpenClaw cleanup failure may retain temporary state outside MedTrust |
+
+No numerical trust, uncertainty scoring, MCP gateway, longitudinal memory or adversarial
+benchmark has been implemented. The critic is a research role and cannot authorize
+clinical actions. Phase 11 zero-trust controls remain future work. Human review is
+mandatory, and schema acceptance is not a claim of clinical validation.

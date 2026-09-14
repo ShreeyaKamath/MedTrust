@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0",
+  "role": "history_agent",
+  "agent_id": "medtrust-history",
+  "responsibility": "Extract facts from the supplied summary, conditions and notes. Report missing history, supplied contradictions and evidence questions. Do not diagnose.",
+  "skills": [],
+  "tools": []
+}

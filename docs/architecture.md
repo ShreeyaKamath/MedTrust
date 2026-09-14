@@ -214,3 +214,53 @@ constant, unique chunk IDs and deterministic ID ties. Default candidate limit is
 per branch. The optional reranker adds 0.10 times query-term title coverage and 0.05
 times query-term text coverage to the fusion score. These are transparent relevance
 heuristics, not clinical confidence. Non-reranked results have rerank_score=0.
+
+## Implemented Phase 6 boundary
+
+The preceding full research pipeline remains proposed. Phase 6 implements only:
+
+```mermaid
+flowchart TD
+    Case[Phase 4 eligible case] --> Context[Role-scoped context builder]
+    Context --> Workflow[Fixed Python orchestrator]
+    Workflow --> Specialists[History / Lab / Medication]
+    Specialists --> RAG[Existing Phase 5 retrieval service]
+    RAG --> Evidence[Evidence agent: supplied results only]
+    Evidence --> Critic[Critic: consistency and evidence gaps]
+    Critic --> Coordinator[Coordinator: research organization]
+    Coordinator --> Result[Validated structured result / human review]
+    Workflow --> Trace[Metadata-only trace]
+    Trace --> Audit[Explicit Phase 3 AgentRun / AuditEvent persistence]
+```
+
+Each agent call crosses the `AgentRuntime` boundary into a deterministic mock or
+OpenClaw `agent exec` adapter. Schema and invocation identity checks precede acceptance;
+citation fields must match supplied retrieval provenance. No agent chooses subsequent
+roles or grants tools. Any runtime, validation or retrieval failure terminates the run.
+The coordinator is invoked last and cannot repair, bypass or continue failed stages.
+
+History receives summary, conditions and notes; lab receives observations; medication
+receives medications and allergies. Patient profile identifiers, database timestamps
+and unrelated detail groups are omitted. Evidence receives explicit questions and
+complete Phase 5 retrieval results (including provenance, source text, ranks/scores).
+Critic and coordinator receive structured summaries, missing information, consistency
+findings and citations, excluding raw fact payloads and runtime metadata. All such
+content remains untrusted. No automatic loading of prior sessions or memory occurs.
+
+There are six agent invocations, at most nine deduplicated questions, five results per
+question, and zero retries. The default local runner explicitly uses sparse retrieval;
+hybrid/dense are explicit selections that preserve Phase 5 failure semantics.
+
+OpenClaw runs with a temporary pinned config, named identity, external workspace,
+resolved model, native harness, no tools/skills/plugins, and disabled memory/context
+loading. Import/startup remains CLI-independent. This is a local execution boundary,
+not the later zero-trust MCP gateway. Details and compatibility limits are in
+[openclaw/README.md](../openclaw/README.md).
+
+Trace metadata includes state transitions, invocation IDs, input hashes/byte counts,
+result counts, retrieval question hashes, timing and safe error categories. Existing
+JSON logging emits fixed observable events. Optional explicit persistence reuses
+AgentRun/AuditEvent without a migration; the caller owns its transaction. Traces are
+in-memory until persisted and are not crash-durable or tamper-evident. Generated prose
+is excluded from database audit records. The optional HTTP endpoint is omitted to
+keep live execution out of the unauthenticated Phase 4 API.

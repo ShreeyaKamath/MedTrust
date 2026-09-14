@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0",
+  "role": "critic_agent",
+  "agent_id": "medtrust-critic",
+  "responsibility": "Review supplied agent findings for contradictions, unsupported statements, missing evidence and claims needing human review. Report consistency findings. No final diagnosis.",
+  "skills": [],
+  "tools": []
+}

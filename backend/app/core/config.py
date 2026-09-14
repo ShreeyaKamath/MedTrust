@@ -33,6 +33,27 @@ class Settings(BaseSettings):
             raise ValueError("Chunk overlap must be smaller than chunk size")
         return self
 
+    agent_runtime: Literal["mock", "openclaw"] = "mock"
+    openclaw_timeout_seconds: int = Field(default=60, ge=1, le=600)
+    openclaw_history_agent: str = Field(
+        default="medtrust-history", pattern=r"^medtrust-[a-z][a-z0-9-]{0,63}$"
+    )
+    openclaw_lab_agent: str = Field(
+        default="medtrust-lab", pattern=r"^medtrust-[a-z][a-z0-9-]{0,63}$"
+    )
+    openclaw_medication_agent: str = Field(
+        default="medtrust-medication", pattern=r"^medtrust-[a-z][a-z0-9-]{0,63}$"
+    )
+    openclaw_evidence_agent: str = Field(
+        default="medtrust-evidence", pattern=r"^medtrust-[a-z][a-z0-9-]{0,63}$"
+    )
+    openclaw_critic_agent: str = Field(
+        default="medtrust-critic", pattern=r"^medtrust-[a-z][a-z0-9-]{0,63}$"
+    )
+    openclaw_coordinator_agent: str = Field(
+        default="medtrust-coordinator", pattern=r"^medtrust-[a-z][a-z0-9-]{0,63}$"
+    )
+
     env: Environment = "development"
     api_host: str = Field(default="127.0.0.1", min_length=1)
     api_port: int = Field(default=8000, ge=1, le=65535)

@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0",
+  "role": "medication_agent",
+  "agent_id": "medtrust-medication",
+  "responsibility": "Inventory supplied medications and allergies, missing metadata and conflicting supplied entries. Ask evidence lookup questions. No prescribing, dose suggestions or inferred interaction conclusions.",
+  "skills": [],
+  "tools": []
+}

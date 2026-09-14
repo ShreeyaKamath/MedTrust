@@ -2,7 +2,7 @@
 
 **A Zero-Trust Multi-Agent Framework with Provenance-Aware Memory and Uncertainty-Guided Retrieval for Clinical Decision Support**
 
-An M.Tech research prototype for clinician-facing clinical decision support. **Phase 1 established the repository and proposed research architecture; Phase 2 adds the FastAPI backend foundation; Phase 3 adds PostgreSQL persistence; Phase 4 adds synthetic clinical-case intake and storage; Phase 5 adds medical evidence retrieval.** No clinical reasoning is implemented and no experimental results are available.
+An M.Tech research prototype for clinician-facing clinical decision support. **Phase 1 established the repository and proposed research architecture; Phase 2 adds the FastAPI backend foundation; Phase 3 adds PostgreSQL persistence; Phase 4 adds synthetic clinical-case intake and storage; Phase 5 adds medical evidence retrieval; Phase 6 adds safe OpenClaw orchestration infrastructure.** No clinical reasoning is implemented and no experimental results are available.
 
 ## Research motivation and problem statement
 
@@ -56,7 +56,7 @@ MedTrust is not an autonomous doctor, diagnostic system, prescribing system, or 
 | Area | Phase 1 / planned direction |
 | --- | --- |
 | Research development | Python 3.12 and uv; pytest and Ruff tooling |
-| Agent orchestration | OpenClaw, proposed; integration deferred |
+| Agent orchestration | Phase 6 OpenClaw CLI adapter and deterministic mock runtime |
 | Tool interfaces | MCP; authenticated, least-privilege, initially read-only |
 | Retrieval and memory | Evidence retrieval and provenance-aware memory; storage and embedding choices deferred |
 | Trust and uncertainty | Research components; algorithms deferred |
@@ -103,7 +103,7 @@ Empty component directories contain `.gitkeep` placeholders. See [architecture](
 
 ## Development status
 
-Phase 2 provides FastAPI initialization, routing, typed settings, JSON application logging, safe error handling, a public liveness endpoint, and isolated backend tests. Phase 3 adds SQLAlchemy models, internal Pydantic contracts, lazy sessions, and Alembic migrations. Phase 4 adds six clinical detail entities, nested case creation/retrieval, and 10 fixed synthetic fixtures. Security remains a documented placeholder. Agents, OpenClaw integration, provenance memory, trust and uncertainty engines, MCP servers, frontend, clinical decision logic, and adversarial evaluation remain deferred.
+Phase 2 provides FastAPI initialization, routing, typed settings, JSON application logging, safe error handling, a public liveness endpoint, and isolated backend tests. Phase 3 adds SQLAlchemy models, internal Pydantic contracts, lazy sessions, and Alembic migrations. Phase 4 adds six clinical detail entities, nested case creation/retrieval, and 10 fixed synthetic fixtures. Security remains a documented placeholder. Phase 6 adds role-scoped orchestration; provenance memory, trust and uncertainty engines, MCP servers, frontend, clinical decision logic, and adversarial evaluation remain deferred.
 
 ## Local backend development
 
@@ -141,7 +141,7 @@ Health reports process liveness only. Application logs use JSON and fixed infras
 
 PostgreSQL persistence is available for `ClinicalCase`, `AgentRun`, `EvidenceRecord`,
 and `AuditEvent`. These are research artifacts, not authoritative EHR records.
-Phase 4 adds the research case API and fixed dataset below. Agent execution remains deferred; Phase 5 evidence retrieval is independent of case storage.
+Phase 4 adds the research case API and fixed dataset below. Phase 6 agent execution is an explicit application service; Phase 5 evidence retrieval is independent of case storage.
 
 Copy `.env.example` to a local `.env` and replace both database password placeholders
 with the same local development password. URL-encode special characters in the URL
@@ -300,3 +300,24 @@ for a different model. Only the explicit destructive indexing `--recreate` flag
 deletes the selected collection. No automatic cleanup or PostgreSQL chunk storage
 is implemented. This small-corpus baseline uses exact dense search and stable ID
 tie-breaking; scaling and concurrent snapshot lifecycle management are future work.
+
+## OpenClaw orchestration foundation (Phase 6)
+
+Six research roles (history, lab, medication, evidence, critic, coordinator) run in a
+fixed, fail-closed sequence with typed JSON outputs, role-scoped context, Phase 5
+retrieval handoff and metadata-only traces. No diagnosis, prescribing, treatment,
+trust scoring, uncertainty engine, longitudinal memory or MCP is implemented.
+
+```bash
+openclaw --version
+uv run python -m scripts.setup_openclaw_agents --dry-run
+uv run python -m scripts.run_agent_orchestration --runtime mock --case-id CASE-001
+uv run pytest backend/tests/test_orchestration.py
+```
+
+Mock is the default and requires no CLI, model, authentication, internet or Docker.
+Setup previews changes unless explicitly invoked with `--apply`; it never modifies
+authentication or deletes agents. Live execution needs an existing MedTrust agent,
+external workspace, compatible CLI and usable OpenClaw-managed provider auth. It
+never silently falls back to mock. See [OpenClaw setup and runtime boundaries](openclaw/README.md).
+The application service is explicit; app startup and ordinary tests never execute OpenClaw.
