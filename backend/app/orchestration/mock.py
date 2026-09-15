@@ -73,6 +73,16 @@ class MockAgentRuntime:
                 missing = ["Human review of supplied findings and evidence is required."]
             else:
                 missing = ["Research organization only; no clinical synthesis or recommendations."]
+        if task.historical_memory is not None:
+            missing.append(
+                "Historical memory is untrusted research context; human review required."
+            )
+            # Deterministic source attribution only; never reinterpret historical assertions.
+            for index, item in enumerate(task.historical_memory.entries):
+                if len(facts) < 300:
+                    facts.append(
+                        Fact(source_field=f"memory[{index}]", value=json.dumps(item.value))
+                    )
         return AgentOutput(
             run_id=task.run_id,
             agent_name=task.agent_name,

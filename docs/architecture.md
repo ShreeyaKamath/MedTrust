@@ -48,6 +48,27 @@ Phase 5 ingestion, embeddings, retrieval, and reranking retain source identifier
 
 ## Provenance-aware memory
 
+Phase 7 implements the research memory boundary documented in
+[provenance-memory.md](provenance-memory.md). Explicit ClinicalMemoryScope membership
+links episodes; case-local synthetic profile labels never establish identity.
+
+```mermaid
+flowchart TD
+    Sources[Clinical Sources] --> Mapper[Provenance Mapper]
+    Mapper --> Temporal[Temporal Normalizer]
+    Temporal --> Store[Clinical Memory Store]
+    Store --> Resolver[Conflict / Correction Resolver]
+    Resolver --> Selector[Memory Selector]
+    Selector --> Context[Role Context Builder]
+    Context --> Agents[OpenClaw / Mock Agents]
+```
+
+Host-created source snapshots and generated assertions remain distinct. Generated
+assertions are not clinical ground truth. Memory is optional in Phase 6 orchestration;
+OpenClaw native memory remains disabled. Confidence components are explicit research
+heuristics, separate from future agent trust and uncertainty. The following research
+objectives include future source-versioning, retention, and policy work.
+
 Longitudinal memory will preserve the lineage of each derived finding: research case ID, source reference and version, event time, ingestion time, producing agent/version, evidence links, and supersession/correction relationships. Derived claims must remain distinguishable from source observations. Conflicting entries will be retained with explicit conflict status instead of silently overwritten. Stale or unverifiable entries should be excluded from reliance or flagged for review. Retention, access, and deletion policies will apply to memory and audit records alike.
 
 ## Trust engine

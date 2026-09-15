@@ -61,6 +61,7 @@ compose.override.yaml
 
 # Reviewed, deterministic Phase 4 synthetic fixtures only.
 !/datasets/synthetic/clinical_cases.json
+!/datasets/synthetic/longitudinal_cases.json
 
 # Reviewed repository-authored Phase 5 evidence and relevance labels.
 !/datasets/synthetic/evidence/

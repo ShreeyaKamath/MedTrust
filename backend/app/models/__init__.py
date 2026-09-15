@@ -8,9 +8,21 @@ from backend.app.models.clinical_details import (
     Observation,
     PatientProfile,
 )
+from backend.app.models.memory import (
+    ClinicalMemoryScope,
+    MemoryEntry,
+    MemoryEpisode,
+    MemoryEvidence,
+    MemoryRelationship,
+)
 from backend.app.models.records import AgentRun, AuditEvent, ClinicalCase, EvidenceRecord
 
 __all__ = [
+    "ClinicalMemoryScope",
+    "MemoryEntry",
+    "MemoryEpisode",
+    "MemoryEvidence",
+    "MemoryRelationship",
     "AgentRun",
     "AuditEvent",
     "ClinicalCase",

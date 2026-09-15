@@ -36,3 +36,13 @@ These are expected behaviors to test, not observed successes. Supplement this in
 Each future experiment needs a versioned manifest linking case IDs, scenario ID, model/prompt/policy versions, corpus snapshot, seed where supported, resource budget, run ID, evaluator rubric, and environment details. Keep local datasets, outputs, logs, model weights, and checkpoints out of Git by default; publish only reviewed, permitted research artifacts without sensitive content.
 
 Before implementation-phase evaluation, confirm isolation, data eligibility, labeling procedures, frozen thresholds, and metric definitions. Numerical acceptance thresholds and sample sizes must be justified through development/pilot work before held-out runs, not chosen after results are seen. Passing this research suite would not establish clinical efficacy, safety certification, or regulatory approval.
+
+## Phase 7 deterministic software checks
+
+A separate reviewed longitudinal fixture exercises stable information, legitimate
+measurement changes, explicit corrections, exact-time contradictions, unknown
+event time, stale history, derived evidence lineage, cross-scope rejection, duplicate
+ingestion, and future-availability exclusion. The local mock demonstration and
+isolated PostgreSQL validator roll back their test data. These checks establish
+software behavior only; adversarial clinical evaluation and effectiveness claims
+remain out of scope. See [memory design](provenance-memory.md).

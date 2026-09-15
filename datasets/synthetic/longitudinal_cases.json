@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0",
+  "simulation_time": "2030-01-01T12:00:00Z",
+  "description": "Repository-authored synthetic software fixtures. Simulated receipt times; not clinical validation.",
+  "scopes": [
+    {
+      "research_id": "SYN-MEM-DEMO-A",
+      "episodes": [
+        "MEMCASE-001",
+        "MEMCASE-002",
+        "MEMCASE-003"
+      ]
+    },
+    {
+      "research_id": "SYN-MEM-DEMO-B",
+      "episodes": [
+        "MEMCASE-004"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "external_case_id": "MEMCASE-001",
+      "title": "Synthetic longitudinal research episode",
+      "summary": "Supplied synthetic monitoring data; no clinical conclusions.",
+      "source_type": "synthetic",
+      "deidentified": true,
+      "observations": [
+        {
+          "category": "laboratory",
+          "name": "Glucose",
+          "value_numeric": 100,
+          "unit": "mg/dL",
+          "observed_at": "2029-12-01T09:00:00Z"
+        },
+        {
+          "category": "laboratory",
+          "name": "Glucose",
+          "value_numeric": 110,
+          "unit": "mg/dL",
+          "observed_at": "2029-12-02T09:00:00Z"
+        },
+        {
+          "category": "laboratory",
+          "name": "Glucose",
+          "value_numeric": 140,
+          "unit": "mg/dL",
+          "observed_at": "2029-12-02T09:00:00Z"
+        },
+        {
+          "category": "laboratory",
+          "name": "Glucose",
+          "value_numeric": 90,
+          "unit": "mg/dL"
+        },
+        {
+          "category": "laboratory",
+          "name": "Glucose",
+          "value_numeric": 95,
+          "unit": "mg/dL",
+          "observed_at": "2020-01-01T09:00:00Z"
+        }
+      ]
+    },
+    {
+      "external_case_id": "MEMCASE-002",
+      "title": "Synthetic longitudinal research episode",
+      "summary": "Supplied synthetic monitoring data; no clinical conclusions.",
+      "source_type": "synthetic",
+      "deidentified": true,
+      "observations": [
+        {
+          "category": "laboratory",
+          "name": "Glucose",
+          "value_numeric": 100,
+          "unit": "mg/dL",
+          "observed_at": "2029-12-01T09:00:00Z"
+        }
+      ]
+    },
+    {
+      "external_case_id": "MEMCASE-003",
+      "title": "Synthetic longitudinal research episode",
+      "summary": "Supplied synthetic monitoring data; no clinical conclusions.",
+      "source_type": "synthetic",
+      "deidentified": true,
+      "observations": [
+        {
+          "category": "laboratory",
+          "name": "Glucose",
+          "value_numeric": 100,
+          "unit": "mg/dL",
+          "observed_at": "2029-12-01T09:00:00Z"
+        }
+      ]
+    },
+    {
+      "external_case_id": "MEMCASE-004",
+      "title": "Synthetic longitudinal research episode",
+      "summary": "Supplied synthetic monitoring data; no clinical conclusions.",
+      "source_type": "synthetic",
+      "deidentified": true,
+      "observations": [
+        {
+          "category": "laboratory",
+          "name": "Glucose",
+          "value_numeric": 100,
+          "unit": "mg/dL",
+          "observed_at": "2029-12-01T09:00:00Z"
+        }
+      ]
+    }
+  ],
+  "scenarios": [
+    "stable_fact",
+    "legitimate_temporal_change",
+    "explicit_correction",
+    "true_contradiction",
+    "unknown_event_time",
+    "stale_history",
+    "derived_evidence_lineage",
+    "cross_scope_rejected",
+    "duplicate_ingestion",
+    "future_availability_excluded"
+  ]
+}

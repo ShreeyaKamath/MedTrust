@@ -65,7 +65,25 @@ Use local synthetic/de-identified cases and mock agents/tools. Never attack real
 | Sensitive trace leakage | Hashes/counts and fixed error categories; no raw stderr/prompts in audit | Input eligibility declarations are not complete de-identification |
 | Session/context contamination | Ephemeral exec state, disabled bootstrap/startup/context/memory search | OpenClaw cleanup failure may retain temporary state outside MedTrust |
 
-No numerical trust, uncertainty scoring, MCP gateway, longitudinal memory or adversarial
-benchmark has been implemented. The critic is a research role and cannot authorize
+No numerical trust, uncertainty scoring, MCP gateway or adversarial benchmark has
+been implemented. Phase 7 adds the separately described memory boundary below. The critic is a research role and cannot authorize
 clinical actions. Phase 11 zero-trust controls remain future work. Human review is
 mandatory, and schema acceptance is not a claim of clinical validation.
+
+## Phase 7 implemented memory boundary
+
+Explicit case membership prevents inferred longitudinal identity. Service checks
+verify source kind, row, field, ownership, and snapshot digest. As-of selection
+excludes future availability and known future events. Relationship checks reject
+cross-scope links and correction cycles; historical rows remain stored. Generated
+assertions remain untrusted derived data, never independent clinical evidence.
+
+Memory-enabled prompts supply escaped historical data separately from instructions
+and current case content. Native OpenClaw memory, plugins, and tools remain disabled.
+Audits contain IDs/hashes/counts and fixed rejection categories; they share caller
+transactions and are not independently crash-durable. No real patient data is used.
+
+Direct SQL, a compromised host/corpus, semantic hallucinations, incomplete clinical
+comparison, and malicious prose remain risks. SHA-256 is not source authentication.
+Application-preserved history is not tamper-proof, and date precision does not prove
+factual accuracy. See [memory limitations](provenance-memory.md).

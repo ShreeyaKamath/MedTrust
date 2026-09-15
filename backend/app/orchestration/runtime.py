@@ -1,5 +1,6 @@
 """Runtime abstraction and strict response binding; no subprocess dependency in workflow."""
 
+import re
 from typing import Protocol
 
 from pydantic import ValidationError
@@ -38,6 +39,20 @@ def validate_findings(data, task: AgentTask) -> AgentFindings:
             raise ValueError("Empty evidence must be marked insufficient")
         if any(ref not in allowed for ref in findings.evidence_refs):
             raise ValueError("Unprovided citation")
+        fields = [fact.source_field for fact in findings.facts] + [
+            field
+            for finding in findings.contradictions + findings.consistency_findings
+            for field in finding.source_fields
+        ]
+        for field in fields:
+            if field.startswith("memory"):
+                match = re.fullmatch(r"memory\[(\d+)\]", field)
+                if (
+                    match is None
+                    or task.historical_memory is None
+                    or int(match[1]) >= len(task.historical_memory.entries)
+                ):
+                    raise ValueError("Unprovided memory reference")
         if (
             task.role not in {Role.HISTORY, Role.LAB, Role.MEDICATION}
             and findings.evidence_questions

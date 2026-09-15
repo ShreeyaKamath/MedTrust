@@ -2,7 +2,7 @@
 
 **A Zero-Trust Multi-Agent Framework with Provenance-Aware Memory and Uncertainty-Guided Retrieval for Clinical Decision Support**
 
-An M.Tech research prototype for clinician-facing clinical decision support. **Phase 1 established the repository and proposed research architecture; Phase 2 adds the FastAPI backend foundation; Phase 3 adds PostgreSQL persistence; Phase 4 adds synthetic clinical-case intake and storage; Phase 5 adds medical evidence retrieval; Phase 6 adds safe OpenClaw orchestration infrastructure.** No clinical reasoning is implemented and no experimental results are available.
+An M.Tech research prototype for clinician-facing clinical decision support. **Phase 1 established the repository and proposed research architecture; Phase 2 adds the FastAPI backend foundation; Phase 3 adds PostgreSQL persistence; Phase 4 adds synthetic clinical-case intake and storage; Phase 5 adds medical evidence retrieval; Phase 6 adds safe OpenClaw orchestration infrastructure; Phase 7 adds explicit provenance-aware research memory.** No clinical reasoning is implemented and no experimental results are available.
 
 ## Research motivation and problem statement
 
@@ -103,7 +103,7 @@ Empty component directories contain `.gitkeep` placeholders. See [architecture](
 
 ## Development status
 
-Phase 2 provides FastAPI initialization, routing, typed settings, JSON application logging, safe error handling, a public liveness endpoint, and isolated backend tests. Phase 3 adds SQLAlchemy models, internal Pydantic contracts, lazy sessions, and Alembic migrations. Phase 4 adds six clinical detail entities, nested case creation/retrieval, and 10 fixed synthetic fixtures. Security remains a documented placeholder. Phase 6 adds role-scoped orchestration; provenance memory, trust and uncertainty engines, MCP servers, frontend, clinical decision logic, and adversarial evaluation remain deferred.
+Phase 2 provides FastAPI initialization, routing, typed settings, JSON application logging, safe error handling, a public liveness endpoint, and isolated backend tests. Phase 3 adds SQLAlchemy models, internal Pydantic contracts, lazy sessions, and Alembic migrations. Phase 4 adds six clinical detail entities, nested case creation/retrieval, and 10 fixed synthetic fixtures. Security remains a documented placeholder. Phase 6 adds role-scoped orchestration; Phase 7 adds optional provenance memory. Trust and uncertainty engines, MCP servers, frontend, clinical decision logic, and adversarial evaluation remain deferred.
 
 ## Local backend development
 
@@ -306,7 +306,7 @@ tie-breaking; scaling and concurrent snapshot lifecycle management are future wo
 Six research roles (history, lab, medication, evidence, critic, coordinator) run in a
 fixed, fail-closed sequence with typed JSON outputs, role-scoped context, Phase 5
 retrieval handoff and metadata-only traces. No diagnosis, prescribing, treatment,
-trust scoring, uncertainty engine, longitudinal memory or MCP is implemented.
+trust scoring, uncertainty engine or MCP is implemented. Phase 7 adds optional host-managed memory.
 
 ```bash
 openclaw --version
@@ -321,3 +321,26 @@ authentication or deletes agents. Live execution needs an existing MedTrust agen
 external workspace, compatible CLI and usable OpenClaw-managed provider auth. It
 never silently falls back to mock. See [OpenClaw setup and runtime boundaries](openclaw/README.md).
 The application service is explicit; app startup and ordinary tests never execute OpenClaw.
+
+## Provenance-aware longitudinal memory (Phase 7)
+
+PostgreSQL-backed research memory links episodes through explicit scope membership.
+Source-field snapshots, agent-derived assertions, evidence lineage, conflicts, and
+corrections remain distinct. Generated assertions are not clinical ground truth or
+an EHR. Selection respects availability/event cutoffs and bounded role context.
+Memory-confidence components are experimental indicators, not agent trust.
+
+```bash
+.venv/bin/python -m scripts.run_memory_scenario --validate-only
+.venv/bin/python -m scripts.run_memory_scenario
+.venv/bin/python -m pytest
+.venv/bin/ruff check backend memory rag scripts alembic
+.venv/bin/ruff format --check backend memory rag scripts alembic
+.venv/bin/python -m scripts.validate_local_postgres
+```
+
+The demonstration uses synthetic fixtures, a declared simulation clock, deterministic
+mock agents, sparse retrieval, and in-memory SQLite. The PostgreSQL validator tests
+0003 in a temporary schema and rolls back its changes. Existing memory-disabled
+Phase 6 execution remains database-independent. OpenClaw native memory and tools
+remain disabled. See [memory design and limitations](docs/provenance-memory.md).
