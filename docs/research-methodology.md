@@ -112,3 +112,18 @@ Execution traces record observable state transitions, input hashes, counts, timi
 runtime labels and sanitized failures. No private chain-of-thought is recorded.
 Live OpenClaw inference, when explicitly validated, must be reported separately from
 mock tests; passing offline tests does not establish real-model safety or effectiveness.
+
+## Phase 7 software memory baseline
+
+The longitudinal fixture tests explicit episode membership, source/evidence lineage,
+temporal cutoffs, corrections, and bounded context using deterministic mock agents.
+Its ten scenarios are software expectations, not independent clinical judgments.
+Memory confidence exposes five documented experimental components without an
+aggregate, calibration claim, or Phase 8 agent trust calculation.
+
+Future memory-enabled/disabled comparisons must freeze source snapshots, corpus
+fingerprints, prompts, component horizons, and budgets. Keep related episodes in
+the same split. Enforce availability-time cutoffs as well as known event cutoffs;
+never reconstruct earlier knowledge using future corrections. Existing mutable
+source records limit historical replay after source edits. Report this exclusion
+behavior and coverage explicitly. See [Phase 7 semantics](provenance-memory.md).

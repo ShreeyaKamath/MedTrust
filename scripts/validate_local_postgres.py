@@ -20,6 +20,7 @@ from backend.app.db.session import get_engine
 from backend.app.models import ClinicalCase
 from backend.app.schemas.clinical_case import ClinicalCaseDetailResponse
 from backend.app.services.clinical_cases import get_case
+from scripts.run_memory_scenario import run_scenario
 from scripts.seed_synthetic_cases import DATASET, load_dataset, seed_cases
 
 
@@ -53,12 +54,13 @@ def main() -> None:
             transaction = connection.begin()
             try:
                 # Identifier contains only a fixed prefix and generated hexadecimal characters.
-                schema = "phase4_validation_" + uuid4().hex
+                schema = "phase7_validation_" + uuid4().hex
                 connection.execute(text(f'CREATE SCHEMA "{schema}"'))
                 connection.execute(text(f'SET LOCAL search_path TO "{schema}"'))
                 config = Config(str(DATASET.parents[2] / "alembic.ini"))
                 config.attributes["connection"] = connection
                 command.upgrade(config, "head")
+                command.check(config)
                 tables = set(inspect(connection).get_table_names(schema=schema))
                 assert tables == set(Base.metadata.tables) | {"alembic_version"}
                 with Session(bind=connection, join_transaction_mode="create_savepoint") as session:
@@ -71,7 +73,19 @@ def main() -> None:
                         )
                         assert detail.patient_profile and detail.clinical_notes
                     session.commit()
-                print("PostgreSQL: base -> 0002; 10 nested cases round-tripped; rerun skipped 10")
+                print("PostgreSQL: base -> 0003; 10 nested cases round-tripped; rerun skipped 10")
+                with Session(bind=connection, join_transaction_mode="create_savepoint") as session:
+                    report = run_scenario(session)
+                    assert report["passed"] == 10
+                    session.rollback()
+                print(
+                    "PostgreSQL: 10 Phase 7 synthetic scenarios passed; scenario writes rolled back"
+                )
+                command.downgrade(config, "0002")
+                assert connection.scalar(select(func.count()).select_from(ClinicalCase)) == 10
+                assert "memory_entries" not in inspect(connection).get_table_names(schema=schema)
+                command.upgrade(config, "0003")
+                command.check(config)
                 command.downgrade(config, "0001")
                 assert connection.scalar(select(func.count()).select_from(ClinicalCase)) == 10
                 assert set(inspect(connection).get_table_names(schema=schema)) == {
@@ -85,7 +99,7 @@ def main() -> None:
                 command.downgrade(config, "base")
                 assert inspect(connection).get_table_names(schema=schema) == ["alembic_version"]
                 command.upgrade(config, "head")
-                print("PostgreSQL: 0002 -> 0001 -> 0002 -> base -> 0002 passed")
+                print("PostgreSQL: 0003 -> 0002 -> 0003 -> 0001 -> 0003 -> base -> 0003 passed")
             finally:
                 transaction.rollback()
         print("Temporary schema and test records rolled back; development records preserved")

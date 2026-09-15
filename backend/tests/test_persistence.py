@@ -273,7 +273,7 @@ with patch("sqlalchemy.create_engine", side_effect=AssertionError("engine at imp
 
 def test_migration_round_trip_and_metadata_match():
     config = Config(str(ROOT / "alembic.ini"))
-    assert ScriptDirectory.from_config(config).get_heads() == ["0002"]
+    assert ScriptDirectory.from_config(config).get_heads() == ["0003"]
     engine = create_engine("sqlite://")
     with engine.begin() as connection:
         config.attributes["connection"] = connection

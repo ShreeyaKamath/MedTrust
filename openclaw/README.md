@@ -138,5 +138,20 @@ uv run ruff format --check backend rag scripts alembic
 those assets; they are not Python lint inputs. Unit tests mock CLI discovery and
 subprocess execution. Live checks are separate and never run from pytest.
 
-No Phase 7 clinical behavior, trust scoring, uncertainty engine, longitudinal memory,
-MCP, frontend, attack framework, consensus algorithm or clinical action is implemented.
+No clinical behavior, trust scoring, uncertainty engine, MCP, frontend, attack
+framework, consensus algorithm or clinical action is implemented. Phase 7 optional
+host memory is described below.
+
+## Phase 7 optional host-supplied memory
+
+The Python orchestrator accepts an optional MemoryIntegration for a persisted case
+with explicit research scope membership. Host code selects bounded historical
+context, maps source references, and validates memory[INDEX] output references.
+Prompts separate SYSTEM_INSTRUCTIONS, CURRENT_CASE, RETRIEVED_EVIDENCE, and
+HISTORICAL_MEMORY. Historical text remains untrusted; generated assertions are not
+clinical ground truth. Findings remain schema 1.0 with a host context extension.
+
+This does not enable OpenClaw native memory search, flush, workspace context, plugins,
+skills, or tools. Default fixture-only Phase 6 behavior remains unchanged. Persist
+completed runs and memory explicitly with the adapter, using caller-owned transactions.
+See [memory architecture and limits](../docs/provenance-memory.md).

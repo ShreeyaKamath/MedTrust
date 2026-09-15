@@ -13,6 +13,7 @@ from backend.app.schemas.clinical_details import (
     MedicationCreate,
     ObservationCreate,
 )
+from memory.contracts import MemorySelection
 from rag.retrieval.schemas import RetrievalResult
 
 Text = Annotated[str, Field(min_length=1, max_length=2000)]
@@ -160,6 +161,7 @@ class AgentTask(Contract):
     agent_name: AgentId
     role: Role
     case_id: UUID | None = None
+    historical_memory: MemorySelection | None = Field(default=None, exclude_if=lambda v: v is None)
     context: HistoryContext | LabContext | MedicationContext | EvidenceContext | ReviewContext
 
     @model_validator(mode="after")

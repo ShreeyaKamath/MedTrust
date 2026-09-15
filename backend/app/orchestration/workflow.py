@@ -2,6 +2,7 @@
 
 import hashlib
 import logging
+from typing import TYPE_CHECKING
 from uuid import uuid4
 
 from backend.app.db.base import utc_now
@@ -27,6 +28,9 @@ from backend.app.orchestration.registry import AgentRegistry
 from backend.app.orchestration.runtime import AgentRuntime, validate_output
 from backend.app.schemas.clinical_case import ClinicalCaseCreateRequest, ClinicalCaseDetailResponse
 from rag.retrieval.service import RetrievalService
+
+if TYPE_CHECKING:
+    from backend.app.orchestration.memory import MemoryIntegration
 
 logger = logging.getLogger("medtrust.orchestration")
 ORDER = list(State)[:-1]
@@ -71,12 +75,14 @@ class Orchestrator:
         registry: AgentRegistry,
         retrieval: RetrievalService,
         mode: str = "sparse",
+        memory: "MemoryIntegration | None" = None,
     ):
         if mode not in {"sparse", "dense", "hybrid"}:
             raise ValueError("Unknown retrieval mode")
         if runtime.name not in {"mock", "openclaw"}:
             raise ValueError("Unknown runtime")
         self.runtime, self.registry, self.retrieval, self.mode = runtime, registry, retrieval, mode
+        self.memory = memory
 
     def run(
         self, case: ClinicalCaseCreateRequest | ClinicalCaseDetailResponse
@@ -93,8 +99,13 @@ class Orchestrator:
                 role=role,
                 case_id=case_id,
                 context=context,
+                historical_memory=self.memory.project(role) if self.memory else None,
             )
             serialized = context.model_dump_json()
+            if self.memory:
+                serialized = task.model_dump_json(
+                    exclude={"run_id", "agent_name", "role", "case_id"}
+                )
             invocation = Invocation(
                 run_id=task.run_id,
                 agent_name=task.agent_name,
@@ -116,6 +127,8 @@ class Orchestrator:
                     len(output.evidence_refs),
                 )
                 outputs.append(output)
+                if self.memory:
+                    self.memory.capture(task, output)
                 event(trace, "agent_invocation_completed", task.run_id)
             except Exception as exc:
                 category = (
@@ -133,6 +146,8 @@ class Orchestrator:
         try:
             transition(trace, State.VALIDATING_INPUT)
             validated = validate_case(case)
+            if self.memory:
+                self.memory.prepare(case, trace.orchestration_id)
             for role, state in (
                 (Role.HISTORY, State.HISTORY_ANALYSIS),
                 (Role.LAB, State.LAB_ANALYSIS),
@@ -153,6 +168,8 @@ class Orchestrator:
                     results = self.retrieval.retrieve_evidence(question, top_k=5, mode=self.mode)
                     batch = EvidenceBatch(question=question, results=results)
                     batches.append(batch)
+                    if self.memory:
+                        self.memory.capture_evidence(results, self.retrieval.sparse.chunks)
                     retrieval_run.result_count = len(results)
                     retrieval_run.status = "completed"
                     event(trace, "retrieval_performed")
